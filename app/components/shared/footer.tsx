@@ -1,0 +1,47 @@
+import Image from "next/image";
+import Link from "next/link";
+
+export const Footer = () => {
+  return (
+    <footer className="mt-24 border-t py-5">
+      <div className="mainContainer grid grid-cols-3 gap-5 justify-items-center max-md:grid-cols-1 max-md:text-center">
+        <div className="space-y-0.5">
+          <Image
+            src="/logo-aportecerto.png"
+            alt="Aporte Certo Logo"
+            width={300}
+            height={300}
+            priority
+            className="w-[171px] h-[36px] object-contain mb-2 max-md:mx-auto"
+          />
+          <p>Ferramentas para Maximizar Seus Investimentos.</p>
+          <p>Copyright © 2025 - Todos os direitos reservados</p>
+          <p>
+            Feito por{" "}
+            <Link
+              href="https://joaobrigido.com.br"
+              target="_blank"
+              className="font-bold"
+            >
+              joaobrigido
+            </Link>
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-0.5">
+          <h3 className="font-semibold">Links</h3>
+          <Link href="/ferramentas/controle-do-aporte">Controle do Aporte</Link>
+          <Link href="/ferramentas/juros-compostos">Juros Compostos</Link>
+          <Link href="/ferramentas/preco-teto">Preço Teto</Link>
+        </div>
+
+        <div className="flex flex-col gap-0.5">
+          <h3 className="font-semibold">Legal</h3>
+          <Link href="#">Termos de uso</Link>
+          <Link href="#">Políticas de privacidade</Link>
+          <p>suporte.aportecerto@gmail.com</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
