@@ -1,13 +1,14 @@
 import { cn } from "@/app/lib/utils";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { CurrencyInput } from "../ui/currency-input";
+import { NumberMaskInput } from "../ui/number-mask-input";
 
 type LabelInputProps = React.ComponentProps<"input"> & {
   label: string;
   errors?: string[];
   containerClassName?: string;
   isCurrency?: boolean;
+  isNumber?: boolean;
 };
 
 export const LabelInput = ({
@@ -15,6 +16,7 @@ export const LabelInput = ({
   errors,
   containerClassName,
   isCurrency,
+  isNumber,
   ...props
 }: LabelInputProps) => {
   return (
@@ -25,7 +27,20 @@ export const LabelInput = ({
       </Label>
 
       {isCurrency ? (
-        <CurrencyInput
+        <NumberMaskInput
+          numberType="currency"
+          className={cn(
+            props.className,
+            errors &&
+              "border-red-500 dark:border-red-500 dark:focus:border-red-500"
+          )}
+          placeholder="R$ 0,00"
+          id={props.name}
+          {...props}
+        />
+      ) : isNumber ? (
+        <NumberMaskInput
+          numberType="number"
           className={cn(
             props.className,
             errors &&
