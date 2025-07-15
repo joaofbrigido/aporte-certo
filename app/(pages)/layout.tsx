@@ -4,6 +4,7 @@ import { ThemeProvider } from "../components/shared/theme-provider";
 import { Footer } from "../components/shared/footer";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
+import { Header } from "../components/shared/header";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextTopLoader color="#f0b100" />
+          <Header />
           {children}
           <Footer />
         </ThemeProvider>

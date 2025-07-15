@@ -189,7 +189,7 @@ const CompoundInterestResult = () => {
                 <Area
                   dataKey="totalInvested"
                   type="natural"
-                  fill="#F1B61D"
+                  fill="#f59e0b"
                   fillOpacity={0.4}
                   stroke="#F1B61D"
                   stackId="a"
@@ -197,7 +197,7 @@ const CompoundInterestResult = () => {
                 <Area
                   dataKey="totalInterest"
                   type="natural"
-                  fill="#f59e0b"
+                  fill="#F1B61D"
                   fillOpacity={0.4}
                   stroke="#f59e0b"
                   stackId="a"
