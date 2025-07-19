@@ -9,6 +9,8 @@ import {
 import { Card, CardContent } from "../components/ui/card";
 import SectionTitle from "./_components/section-title";
 import { cn } from "../lib/utils";
+import { PlansCard } from "./_components/plans-card";
+import { PlansCardItem } from "./_components/plans-card-item";
 
 export default function Home() {
   return (
@@ -107,6 +109,32 @@ export default function Home() {
             <CardContent></CardContent>
           </Card>
         </div>
+      </section>
+
+      <section>
+        <SectionTitle title="Planos" subtitle="Invista em Suas Decisões" />
+
+        <div className="grid grid-cols-2 gap-5 mt-16 max-md:grid-cols-1">
+          <PlansCard name="Free" price="R$0,00" plan="free">
+            <PlansCardItem title="Acesso a todas as novas calculadoras" />
+            <PlansCardItem title="Sem anúncios" notSupport />
+            <PlansCardItem title="Mantem os dados salvos" notSupport />
+            <PlansCardItem title="Suporte via email" notSupport />
+            <PlansCardItem title="Exportação de tabelas em excel" notSupport />
+          </PlansCard>
+
+          <PlansCard name="Pro" price="R$69,00" plan="pro" popular>
+            <PlansCardItem title="Acesso a todas as novas calculadoras" />
+            <PlansCardItem title="Sem anúncios" />
+            <PlansCardItem title="Mantem os dados salvos" />
+            <PlansCardItem title="Suporte via email" />
+            <PlansCardItem title="Exportação de tabelas em excel" />
+          </PlansCard>
+        </div>
+      </section>
+
+      <section>
+        <SectionTitle title="Faq" subtitle="Dúvidas Frequentes" />
       </section>
     </div>
   );
