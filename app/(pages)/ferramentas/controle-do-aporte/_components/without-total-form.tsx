@@ -213,77 +213,71 @@ export const WithoutTotalForm = () => {
       </Card>
 
       <section className="grid gap-5 grid-cols-[1fr_0.5fr] max-lg:grid-cols-1">
-        <Card>
-          <CardContent>
-            <BasicTable
-              bordered
-              header={
-                <>
-                  <TableHead>Ativo</TableHead>
-                  <TableHead>Preço Unitário</TableHead>
-                  <TableHead>Qtd Cotas</TableHead>
-                  <TableHead>Preço Total</TableHead>
-                  <TableHead></TableHead>
-                </>
-              }
-              footer={
-                investiments.length > 0 && (
-                  <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell>{numberToCurrency(investimentTotal)}</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                )
-              }
-            >
-              {investiments && investiments.length > 0 ? (
-                investiments.map((investment) => (
-                  <TableRow key={`investiments-${investment.id}`}>
-                    <TableCell className="flex items-center gap-2 min-w-[130px]">
-                      <Image
-                        src={investment.logo}
-                        alt={investment.stock}
-                        width={32}
-                        height={32}
-                        className="rounded-md"
-                      />
-                      {investment.stock}
-                    </TableCell>
-                    <TableCell>
-                      {numberToCurrency(investment.stockPrice)}
-                    </TableCell>
-                    <TableCell>{investment.stocksAmount}</TableCell>
-                    <TableCell>{numberToCurrency(investment.total)}</TableCell>
-                    <TableCell>
-                      <TableActionButtons
-                        onEdit={() => {
-                          setEditingId(investment.id);
-                          setStockInput(
-                            `${investment.stock}|${investment.stockPrice}|${investment.logo}`
-                          );
-                          setQuantityInput(investment.stocksAmount.toString());
-                          setTotalInput(investment.total);
-                        }}
-                        onDelete={() => {
-                          handleDeleteInvestiment(investment.id);
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="text-center text-muted-foreground"
-                  >
-                    Nenhum Ativo Adicionado
-                  </TableCell>
-                </TableRow>
-              )}
-            </BasicTable>
-          </CardContent>
-        </Card>
+        <BasicTable
+          bordered
+          header={
+            <>
+              <TableHead>Ativo</TableHead>
+              <TableHead>Preço Unitário</TableHead>
+              <TableHead>Qtd Cotas</TableHead>
+              <TableHead>Preço Total</TableHead>
+              <TableHead></TableHead>
+            </>
+          }
+          footer={
+            investiments.length > 0 && (
+              <TableRow>
+                <TableCell colSpan={3}>Total</TableCell>
+                <TableCell>{numberToCurrency(investimentTotal)}</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            )
+          }
+        >
+          {investiments && investiments.length > 0 ? (
+            investiments.map((investment) => (
+              <TableRow key={`investiments-${investment.id}`}>
+                <TableCell className="flex items-center gap-2 min-w-[130px]">
+                  <Image
+                    src={investment.logo}
+                    alt={investment.stock}
+                    width={32}
+                    height={32}
+                    className="rounded-md"
+                  />
+                  {investment.stock}
+                </TableCell>
+                <TableCell>{numberToCurrency(investment.stockPrice)}</TableCell>
+                <TableCell>{investment.stocksAmount}</TableCell>
+                <TableCell>{numberToCurrency(investment.total)}</TableCell>
+                <TableCell>
+                  <TableActionButtons
+                    onEdit={() => {
+                      setEditingId(investment.id);
+                      setStockInput(
+                        `${investment.stock}|${investment.stockPrice}|${investment.logo}`
+                      );
+                      setQuantityInput(investment.stocksAmount.toString());
+                      setTotalInput(investment.total);
+                    }}
+                    onDelete={() => {
+                      handleDeleteInvestiment(investment.id);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={6}
+                className="text-center text-muted-foreground"
+              >
+                Nenhum Ativo Adicionado
+              </TableCell>
+            </TableRow>
+          )}
+        </BasicTable>
 
         <div className="space-y-5">
           <Card>

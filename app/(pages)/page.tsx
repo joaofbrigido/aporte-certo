@@ -11,8 +11,51 @@ import SectionTitle from "./_components/section-title";
 import { cn } from "../lib/utils";
 import { PlansCard } from "./_components/plans-card";
 import { PlansCardItem } from "./_components/plans-card-item";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../components/ui/accordion";
 
 export default function Home() {
+  const faqs = [
+    {
+      id: 1,
+      question: "Como funcionam as calculadoras do site?",
+      answer:
+        "Nossas calculadoras são ferramentas fáceis de usar que ajudam a simular diferentes cenários de investimento, permitindo que você visualize resultados de juros compostos, cálculos de preço teto e de preço de aportes.",
+    },
+
+    {
+      id: 2,
+      question: "As calculadoras são gratuitas?",
+      answer:
+        "Sim, oferecemos uma versão gratuita com acesso básico às nossas principais ferramentas. Para funcionalidades avançadas, mais detalhadas e sem anúncios,  temos um plano pro a partir de R$69.",
+    },
+
+    {
+      id: 3,
+      question: "Quais são as vantagens dos planos pagos?",
+      answer:
+        "Os planos pagos oferecem acesso a recursos avançados sem anúncios, relatórios detalhados e mais opções de personalização nas simulações, permitindo que você tome decisões de investimento com mais precisão.",
+    },
+
+    {
+      id: 4,
+      question: "O acesso do PRO é vitalício?",
+      answer:
+        "Sim, o plano PRO oferece acesso vitalício as ferramentas do site. Pague uma vez, utilize para sempre em qualquer momento que desejar!",
+    },
+
+    {
+      id: 5,
+      question: "As simulações são 100% precisas?",
+      answer:
+        "Nossas simulações utilizam fórmulas amplamente aceitas no mercado financeiro, mas sempre recomendamos que o usuário leve em consideração fatores externos e consulte um especialista antes de tomar decisões de investimento.",
+    },
+  ];
+
   return (
     <div className="mainContainer m-5 relative">
       <main className="pt-11">
@@ -56,7 +99,7 @@ export default function Home() {
           subtitle="Descubra as Nossas Calculadoras Poderosas"
         />
 
-        <div className="flex items-center justify-between gap-5 mt-16">
+        <div className="flex items-center justify-between gap-5 mt-16 max-lg:flex-col">
           <ul className="space-y-4">
             <li
               className={cn(
@@ -105,7 +148,7 @@ export default function Home() {
             </li>
           </ul>
 
-          <Card className="w-2/3 h-[500px] border-8">
+          <Card className="w-2/3 h-[500px] border-8 min-w-[500px] max-lg:min-w-full">
             <CardContent></CardContent>
           </Card>
         </div>
@@ -135,6 +178,19 @@ export default function Home() {
 
       <section>
         <SectionTitle title="Faq" subtitle="Dúvidas Frequentes" />
+
+        <Accordion type="single" collapsible className="mt-16">
+          {faqs.map((faq) => (
+            <AccordionItem value={`faq-${faq.id}`} key={`FAQ-${faq.id}`}>
+              <AccordionTrigger className="cursor-pointer text-lg">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-base">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </section>
     </div>
   );
