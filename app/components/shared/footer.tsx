@@ -21,7 +21,7 @@ export const Footer = () => {
             <Link
               href="https://joaobrigido.com.br"
               target="_blank"
-              className="font-bold"
+              className="font-bold hover:underline"
             >
               joaobrigido
             </Link>
@@ -30,15 +30,28 @@ export const Footer = () => {
 
         <div className="flex flex-col gap-0.5">
           <h3 className="font-semibold">Links</h3>
-          <Link href="/ferramentas/controle-do-aporte">Controle do Aporte</Link>
-          <Link href="/ferramentas/juros-compostos">Juros Compostos</Link>
-          <Link href="/ferramentas/preco-teto">Preço Teto</Link>
+          <Link
+            href="/ferramentas/controle-do-aporte"
+            className="hover:underline"
+          >
+            Controle do Aporte
+          </Link>
+          <Link href="/ferramentas/juros-compostos" className="hover:underline">
+            Juros Compostos
+          </Link>
+          <Link href="/ferramentas/preco-teto" className="hover:underline">
+            Preço Teto
+          </Link>
         </div>
 
         <div className="flex flex-col gap-0.5">
           <h3 className="font-semibold">Legal</h3>
-          <Link href="#">Termos de uso</Link>
-          <Link href="#">Políticas de privacidade</Link>
+          <Link href="#" className="hover:underline">
+            Termos de uso
+          </Link>
+          <Link href="#" className="hover:underline">
+            Políticas de privacidade
+          </Link>
           <p>suporte.aportecerto@gmail.com</p>
         </div>
       </div>

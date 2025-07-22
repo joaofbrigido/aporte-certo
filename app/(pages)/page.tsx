@@ -59,17 +59,14 @@ export default function Home() {
   return (
     <div className="mainContainer m-5 relative">
       <main className="pt-11">
-        <h1 className="text-5xl font-bold text-center max-w-3xl leading-14 m-auto max-md:text-3xl max-md:leading-12 max-sm:leading-10">
-          <span className="relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-1 before:bg-primary">
-            <span className="relative text-secondary">
-              Ferramentas Essenciais
-            </span>
-          </span>
-          <span className="mt-2 ml-2 leading-[72px] max-md:leading-14 max-sm:leading-10">
-            para Maximizar Seus Investimentos
-          </span>
+        <h1 className="text-5xl font-bold text-center max-w-3xl m-auto max-md:text-3xl leading-16 max-md:leading-10 ">
+          Ferramentas Essenciais para{" "}
+          <span className="relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-primary before:rounded">
+            <span className="relative text-secondary px-2">Maximizar</span>
+          </span>{" "}
+          Seus Investimentos
         </h1>
-        <p className="mt-2 m-auto text-lg text-muted-foreground text-center max-w-xl">
+        <p className="mt-4 m-auto text-lg text-muted-foreground text-center max-w-xl">
           Preço teto, juros compostos e muito mais. Aumente seu rendimento com
           nossas calculadoras inteligentes.
         </p>

@@ -12,6 +12,7 @@ import { cn } from "@/app/lib/utils";
 import { numberToCurrency } from "@/app/utils/format-numbers";
 import Image from "next/image";
 import { Progress } from "@/app/components/ui/progress";
+import { X } from "lucide-react";
 
 type Investiment = {
   id: string;
@@ -56,6 +57,12 @@ export const WithTotalForm = () => {
     sotckPrice: number
   ) {
     return Math.ceil((totalInvestment * (percentage / 100)) / sotckPrice);
+  }
+
+  function handleClearFields() {
+    setEditingId(null);
+    setStockInput("");
+    setPercentageInput("");
   }
 
   function handleUpsertInvestiment(e: React.FormEvent<HTMLFormElement>) {
@@ -119,9 +126,7 @@ export const WithTotalForm = () => {
       setInvestimentTotal((prev) => prev + stockAmount * Number(stockPrice));
     }
 
-    setEditingId(null);
-    setStockInput("");
-    setPercentageInput("");
+    handleClearFields();
   }
 
   function handleDeleteInvestiment(id: string) {
@@ -177,13 +182,25 @@ export const WithTotalForm = () => {
               errors={fieldErros?.percentage}
             />
           </div>
-          <MainButton
-            isAddBtn
-            className={cn("max-sm:w-full", fieldErros && "self-center")}
-            disabled={!editingId && percentagemTotal >= 100}
+          <div
+            className={cn(
+              "flex gap-3 max-sm:self-center",
+              fieldErros && "self-center"
+            )}
           >
-            {editingId ? "Atualizar" : "Adicionar"}
-          </MainButton>
+            <MainButton
+              isAddBtn
+              disabled={!editingId && percentagemTotal >= 100}
+            >
+              {editingId ? "Atualizar" : "Adicionar"}
+            </MainButton>
+            {editingId && (
+              <MainButton variant={"secondary"} onClick={handleClearFields}>
+                <X />
+                Cancelar
+              </MainButton>
+            )}
+          </div>
         </div>
       </form>
 

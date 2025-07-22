@@ -14,7 +14,7 @@ import {
 } from "@/app/components/ui/chart";
 import { TableCell, TableHead, TableRow } from "@/app/components/ui/table";
 import { numberToCurrency } from "@/app/utils/format-numbers";
-import { DollarSign } from "lucide-react";
+import { DollarSign, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Pie, PieChart } from "recharts";
@@ -64,6 +64,13 @@ export const WithoutTotalForm = () => {
     }
   }
 
+  function handleClearFields() {
+    setEditingId(null);
+    setStockInput("");
+    setQuantityInput("");
+    setTotalInput(0);
+  }
+
   function handleUpsertInvestiment(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -110,10 +117,7 @@ export const WithoutTotalForm = () => {
       setInvestimentTotal((prev) => prev + Number(result.data.total));
     }
 
-    setEditingId(null);
-    setStockInput("");
-    setQuantityInput("");
-    setTotalInput(0);
+    handleClearFields();
   }
 
   function handleDeleteInvestiment(id: string) {
@@ -205,9 +209,17 @@ export const WithoutTotalForm = () => {
                 readOnly
               />
             </div>
-            <MainButton isAddBtn className="max-sm:w-full mt-5 mx-auto flex">
-              {editingId ? "Atualizar" : "Adicionar"}
-            </MainButton>
+            <div className="flex gap-3 mt-5 justify-center">
+              {editingId && (
+                <MainButton variant={"secondary"} onClick={handleClearFields}>
+                  <X />
+                  Cancelar
+                </MainButton>
+              )}
+              <MainButton isAddBtn>
+                {editingId ? "Atualizar" : "Adicionar"}
+              </MainButton>
+            </div>
           </form>
         </CardContent>
       </Card>
