@@ -11,8 +11,12 @@ import React from "react";
 
 export const CeilingPriceTable = ({
   ceilingPrices,
+  onEdit,
+  onDelete,
 }: {
   ceilingPrices: CeilingPrice[];
+  onEdit: (ceilingPrice: CeilingPrice) => void;
+  onDelete: (guid: string) => void;
 }) => {
   return (
     <BasicTable
@@ -21,8 +25,8 @@ export const CeilingPriceTable = ({
       header={
         <>
           <TableHead>Ativo</TableHead>
+          <TableHead>D. Yield Esperado</TableHead>
           <TableHead>DPA</TableHead>
-          <TableHead>D. Yield</TableHead>
           <TableHead>Preço Atual</TableHead>
           <TableHead>Preço Teto</TableHead>
           <TableHead>Margin Segurança</TableHead>
@@ -43,8 +47,8 @@ export const CeilingPriceTable = ({
               />
               {cp.stock.name}
             </TableCell>
-            <TableCell>{numberToCurrency(cp.dpa)}</TableCell>
             <TableCell>{cp.dividendYield}%</TableCell>
+            <TableCell>{numberToCurrency(cp.dpa)}</TableCell>
             <TableCell>{numberToCurrency(cp.stock.price)}</TableCell>
             <TableCell>{numberToCurrency(cp.ceilingPrice)}</TableCell>
             <TableCell
@@ -55,7 +59,12 @@ export const CeilingPriceTable = ({
               {numberToPercent(cp.safetyMargin)}
             </TableCell>
             <TableCell>
-              <TableActionButtons onEdit={() => {}} onDelete={() => {}} />
+              <TableActionButtons
+                onEdit={() => {
+                  onEdit(cp);
+                }}
+                onDelete={() => onDelete(cp.guid)}
+              />
             </TableCell>
           </TableRow>
         ))

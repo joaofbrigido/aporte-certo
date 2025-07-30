@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { Input } from "./input";
 import { cn } from "@/app/lib/utils";
@@ -27,23 +28,47 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
   NumberMaskInputProps;
 
 const NumberMaskInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, initialValue = "", onCallback, numberType, ...props }, ref) => {
-    const [value, setValue] = React.useReducer((_: unknown, next: string) => {
-      const digits = next.replace(/\D/g, "");
+  (
+    {
+      className,
+      value: controlledValue,
+      onChange,
+      initialValue = "",
+      onCallback,
+      numberType,
+      ...props
+    },
+    ref
+  ) => {
+    const formatValue = (val: string) => {
+      const digits = val.replace(/\D/g, "");
 
       if (numberType === "currency") {
         return moneyFormatter.format(Number(digits) / 100);
       }
 
       return numberFormatter.format(Number(digits) / 100);
-    }, initialValue);
+    };
 
-    function handleChange(formattedValue: string) {
+    const [value, setValue] = React.useState(
+      () => controlledValue ?? formatValue(initialValue)
+    );
+
+    // Atualiza quando valor controlado mudar
+    React.useEffect(() => {
+      if (controlledValue !== undefined) {
+        setValue(formatValue(controlledValue.toString()));
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [controlledValue]);
+
+    const handleChange = (formattedValue: string) => {
       const digits = formattedValue.replace(/\D/g, "");
       const realValue = Number(digits) / 100;
 
       if (onCallback) onCallback(realValue);
-    }
+      if (onChange) onChange({ target: { value: formattedValue } } as any);
+    };
 
     return (
       <Input
@@ -52,8 +77,9 @@ const NumberMaskInput = React.forwardRef<HTMLInputElement, InputProps>(
         {...props}
         value={value}
         onChange={(ev) => {
-          setValue(ev.target.value);
-          handleChange(ev.target.value);
+          const formatted = formatValue(ev.target.value);
+          setValue(formatted);
+          handleChange(formatted);
         }}
       />
     );

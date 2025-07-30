@@ -3,6 +3,7 @@
 import z from "zod";
 import {
   createCeilingPriceCookie,
+  deleteCeilingPriceCookie,
   updateCeilingPriceCookie,
 } from "../services/ceiling-price/service";
 import { CeilingPrice } from "../services/ceiling-price/types";
@@ -19,8 +20,8 @@ export async function upsertCeilingPriceAction(
       .transform((val) => Number(val.replace(/\./g, "").replace(",", "."))),
     dpa: z
       .string()
-      .min(1, "Informe o dpa/ano estimado")
-      .transform((val) => Number(val.replace(/\./g, "").replace(",", "."))),
+      .min(1, "Informe o valor total")
+      .transform((val) => Number(val.replace(/\D/g, "")) / 100), // remove tudo que não for dígito
   });
 
   const result = schema.safeParse(Object.fromEntries(data));
@@ -41,8 +42,8 @@ export async function upsertCeilingPriceAction(
     },
     dividendYield: result.data.dividendYield,
     dpa: result.data.dpa,
-    ceilingPrice: ceilingPrice,
-    safetyMargin: safetyMargin,
+    ceilingPrice: +ceilingPrice.toFixed(2),
+    safetyMargin: +safetyMargin.toFixed(2),
   } as CeilingPrice;
 
   let message;
@@ -69,17 +70,14 @@ export async function upsertCeilingPriceAction(
   };
 }
 
-// export async function deleteLocalizationAction(guid: string) {
-//   const deleteResult = await deleteLocalization(guid);
+export async function deleteCeilingPriceAction(guid: string) {
+  const deleteResult = await deleteCeilingPriceCookie(guid);
 
-//   if (!deleteResult.success && deleteResult.getErrorMessages())
-//     return { success: false, message: deleteResult.getErrorMessages() };
+  if (!deleteResult.success)
+    return { success: false, message: deleteResult.message };
 
-//   const dict = await getDictionaryWhithLang();
-//   revalidateTag("localizations");
-
-//   return {
-//     success: true,
-//     message: dict.localizations["success-deleted"],
-//   };
-// }
+  return {
+    success: true,
+    message: "Ativo deletado com sucesso!",
+  };
+}

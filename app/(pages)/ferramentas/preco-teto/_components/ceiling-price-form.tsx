@@ -1,6 +1,9 @@
 "use client";
 
-import { upsertCeilingPriceAction } from "@/app/actions/ceiling-price";
+import {
+  deleteCeilingPriceAction,
+  upsertCeilingPriceAction,
+} from "@/app/actions/ceiling-price";
 import { LabelInput } from "@/app/components/shared/label-input";
 import { MainButton } from "@/app/components/shared/main-button";
 import { StockSelect } from "@/app/components/shared/stock-select";
@@ -10,6 +13,7 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import { CeilingPriceTable } from "./ceiling-price-table";
 import { CeilingPrice } from "@/app/services/ceiling-price/types";
+import { toast } from "sonner";
 
 export const CeilingPriceForm = ({
   ceilingPrices,
@@ -18,6 +22,35 @@ export const CeilingPriceForm = ({
 }) => {
   const [editingId, setEditingId] = useState<null | string>(null);
   const [stockInput, setStockInput] = useState("");
+  const [dividendYieldInput, setDividendYieldInput] = useState("");
+  const [dpaInput, setDpaInput] = useState("");
+
+  function clearForm() {
+    setEditingId(null);
+    setStockInput("");
+    setDividendYieldInput("");
+    setDpaInput("");
+  }
+
+  function handleEditCeilingPrice(ceilingPrice: CeilingPrice) {
+    setEditingId(ceilingPrice.guid);
+    setStockInput(
+      `${ceilingPrice.stock.name}|${ceilingPrice.stock.price}|${ceilingPrice.stock.logo}`
+    );
+    setDividendYieldInput(ceilingPrice.dividendYield.toFixed(2).toString());
+    setDpaInput(ceilingPrice.dpa.toFixed(2).toString());
+  }
+
+  async function handleDeleteCeilingPrice(guid: string) {
+    const response = await deleteCeilingPriceAction(guid);
+
+    if (!response.success) {
+      toast.error(response.message);
+      return;
+    }
+
+    toast.success("Ativo deletado com sucesso!");
+  }
 
   const [{ fieldErrors }, handleSubmit, isPending] = useForm({
     action: upsertCeilingPriceAction,
@@ -29,6 +62,7 @@ export const CeilingPriceForm = ({
         <CardContent>
           <form
             onSubmit={(e) => {
+              clearForm();
               handleSubmit(e, {
                 guid: editingId ?? "new",
               });
@@ -39,9 +73,9 @@ export const CeilingPriceForm = ({
               label="Ativo"
               placeholder="Selecione um ativo"
               name="stock"
-              required
               value={stockInput}
               onValueChange={setStockInput}
+              required
               errors={fieldErrors?.stock}
             />
             <LabelInput
@@ -49,6 +83,8 @@ export const CeilingPriceForm = ({
               placeholder="% 0,00"
               name="dividendYield"
               isNumber
+              value={dividendYieldInput}
+              onChange={(e) => setDividendYieldInput(e.target.value)}
               required
               errors={fieldErrors?.dividendYield}
             />
@@ -56,7 +92,9 @@ export const CeilingPriceForm = ({
               label="DPA/ano"
               placeholder="0,00"
               name="dpa"
-              isNumber
+              isCurrency
+              value={dpaInput}
+              onChange={(e) => setDpaInput(e.target.value)}
               required
               errors={fieldErrors?.dpa}
             />
@@ -66,7 +104,7 @@ export const CeilingPriceForm = ({
                 <MainButton
                   type="button"
                   variant={"secondary"}
-                  onClick={() => setEditingId("")}
+                  onClick={clearForm}
                 >
                   <X />
                   Cancelar
@@ -80,7 +118,11 @@ export const CeilingPriceForm = ({
         </CardContent>
       </Card>
 
-      <CeilingPriceTable ceilingPrices={ceilingPrices} />
+      <CeilingPriceTable
+        ceilingPrices={ceilingPrices}
+        onEdit={handleEditCeilingPrice}
+        onDelete={handleDeleteCeilingPrice}
+      />
     </>
   );
 };
