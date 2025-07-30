@@ -249,7 +249,7 @@ export const CompoundInterestForm = () => {
         </Select>
       </div>
 
-      <div className="space-x-2 col-span-full place-self-end">
+      <div className="mt-3 space-x-2 col-span-full place-self-end">
         <MainButton variant={"secondary"} type="button" onClick={clearForm}>
           Limpar
         </MainButton>
