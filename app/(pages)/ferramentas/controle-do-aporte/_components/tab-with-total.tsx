@@ -1,8 +1,13 @@
 import { Card, CardContent } from "@/app/components/ui/card";
 import { Info } from "lucide-react";
 import { WithTotalForm } from "./with-total-form";
+import { InvestmentControlWithTotal } from "@/app/services/investiment-control/types";
 
-export const TabWithTotal = () => {
+export const TabWithTotal = ({
+  investimentsWithTotal,
+}: {
+  investimentsWithTotal: InvestmentControlWithTotal;
+}) => {
   return (
     <section className="space-y-5">
       <Card>
@@ -16,7 +21,7 @@ export const TabWithTotal = () => {
 
       <Card>
         <CardContent>
-          <WithTotalForm />
+          <WithTotalForm investimentsWithTotal={investimentsWithTotal} />
         </CardContent>
       </Card>
     </section>

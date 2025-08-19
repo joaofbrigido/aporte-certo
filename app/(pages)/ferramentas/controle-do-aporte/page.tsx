@@ -8,8 +8,15 @@ import {
 import { ChartPie, Infinity } from "lucide-react";
 import { TabWithTotal } from "./_components/tab-with-total";
 import { TabWithoutTotal } from "./_components/tab-without-total";
+import { cookies } from "next/headers";
+import { InvestmentControlWithTotal } from "@/app/services/investiment-control/types";
 
-export default function ControleDoAportePage() {
+export default async function ControleDoAportePage() {
+  const cookieStore = await cookies();
+  const investimentsWithTotal = JSON.parse(
+    cookieStore.get("InvestmentControlWithTotal")?.value || "{}"
+  ) as InvestmentControlWithTotal;
+
   return (
     <>
       <ToolsTabs active="controle-do-aporte" />
@@ -32,7 +39,7 @@ export default function ControleDoAportePage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value={"com-total"}>
-          <TabWithTotal />
+          <TabWithTotal investimentsWithTotal={investimentsWithTotal} />
         </TabsContent>
         <TabsContent value={"sem-total"}>
           <TabWithoutTotal />

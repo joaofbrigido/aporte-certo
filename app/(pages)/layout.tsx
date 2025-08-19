@@ -5,6 +5,7 @@ import { Footer } from "../components/shared/footer";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Header } from "../components/shared/header";
+import { Toaster } from "../components/ui/sonner";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
           <NextTopLoader color="#f0b100" />
           <Header />
           {children}
+          <Toaster richColors />
           <Footer />
         </ThemeProvider>
       </body>

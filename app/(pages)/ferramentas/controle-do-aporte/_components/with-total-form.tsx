@@ -6,154 +6,92 @@ import { MainButton } from "@/app/components/shared/main-button";
 import { StockSelect } from "@/app/components/shared/stock-select";
 import { TableActionButtons } from "@/app/components/shared/table-action-buttons";
 import { TableCell, TableHead, TableRow } from "@/app/components/ui/table";
-import { z } from "zod";
 import { useState } from "react";
 import { cn } from "@/app/lib/utils";
 import { numberToCurrency } from "@/app/utils/format-numbers";
 import Image from "next/image";
 import { Progress } from "@/app/components/ui/progress";
 import { X } from "lucide-react";
+import { useForm } from "@/app/hooks/use-form";
+import { InvestmentControlWithTotal } from "@/app/services/investiment-control/types";
+import {
+  deleteInvestmentControlWithTotalAction,
+  upsertInvestmentControlWithTotalAction,
+} from "@/app/actions/investiment-control";
+import { toast } from "sonner";
 
-type Investiment = {
-  id: string;
-  stock: string;
-  logo: string;
-  stockPrice: number;
-  percentage: number;
-  stocksAmount: number;
-  total: number;
-};
-
-type FieldErrors = {
-  totalInvestment?: string[] | undefined;
-  stock?: string[] | undefined;
-  percentage?: string[] | undefined;
-};
-
-const investimentFormSchema = z.object({
-  totalInvestment: z
-    .string()
-    .min(1, "Informe o valor total")
-    .transform((val) => Number(val.replace(/\D/g, "")) / 100), // remove tudo que não for dígito e divide por 100 (para lidar com centavos)
-  stock: z.string().min(1, "Selecione um ativo"),
-  percentage: z
-    .string()
-    .min(1, "Informe uma porcentagem")
-    .transform((val) => Number(val)),
-});
-
-export const WithTotalForm = () => {
-  const [investiments, setInvestiments] = useState<Investiment[]>([]);
-  const [fieldErros, FieldErros] = useState<FieldErrors>();
-  const [percentagemTotal, setPercentagemTotal] = useState(0);
+export const WithTotalForm = ({
+  investimentsWithTotal,
+}: {
+  investimentsWithTotal: InvestmentControlWithTotal;
+}) => {
   const [stockInput, setStockInput] = useState("");
   const [percentageInput, setPercentageInput] = useState("");
-  const [investimentTotal, setInvestimentTotal] = useState(0);
-  const [editingId, setEditingId] = useState<string | null>(null);
-
-  function calculateStockAmount(
-    totalInvestment: number,
-    percentage: number,
-    sotckPrice: number
-  ) {
-    return Math.ceil((totalInvestment * (percentage / 100)) / sotckPrice);
-  }
+  const [editingGuid, setEditingGuid] = useState<string | null>(null);
+  const totalPercentage = investimentsWithTotal.totalPercentage ?? 0;
+  const allStocksTotal = investimentsWithTotal.investments?.reduce(
+    (acc, inv) => acc + inv.total,
+    0
+  );
 
   function handleClearFields() {
-    setEditingId(null);
+    setEditingGuid(null);
     setStockInput("");
     setPercentageInput("");
   }
 
-  function handleUpsertInvestiment(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    const rawData = {
-      totalInvestment: formData.get("totalInvestment")?.toString() || "",
-      stock: formData.get("stock")?.toString() || "",
-      percentage: formData.get("percentage")?.toString() || "",
-    };
-
-    const result = investimentFormSchema.safeParse(rawData);
-    if (!result.success) {
-      FieldErros(result.error.flatten().fieldErrors);
-      return;
-    }
-
-    FieldErros(undefined);
-
-    const [stockName, stockPrice, stockLogo] = result.data.stock.split("|");
-
-    const stockAmount = calculateStockAmount(
-      result.data.totalInvestment,
-      result.data.percentage,
-      Number(stockPrice)
-    );
-
-    const newInvestiment: Investiment = {
-      id: editingId ?? crypto.randomUUID(),
-      stock: stockName,
-      logo: stockLogo,
-      stockPrice: Number(stockPrice),
-      percentage: result.data.percentage,
-      stocksAmount: stockAmount,
-      total: stockAmount * Number(stockPrice),
-    };
-
-    if (editingId) {
-      const prevInvestment = investiments.find((inv) => inv.id === editingId);
-      if (!prevInvestment) return;
-
-      setInvestiments((prev) =>
-        prev.map((inv) => (inv.id === editingId ? newInvestiment : inv))
-      );
-
-      setPercentagemTotal(
-        (prev) => prev - prevInvestment.percentage + result.data.percentage
-      );
-      setInvestimentTotal(
-        (prev) => prev - prevInvestment.total + newInvestiment.total
-      );
-    } else {
-      setInvestiments((prev) => [...prev, newInvestiment]);
-      setPercentagemTotal((prev) =>
-        prev + result.data.percentage > 100
-          ? 100
-          : prev + result.data.percentage
-      );
-      setInvestimentTotal((prev) => prev + stockAmount * Number(stockPrice));
-    }
-
-    handleClearFields();
+  async function handleDelete(guid: string) {
+    const result = await deleteInvestmentControlWithTotalAction(guid);
+    toast.success(result.message);
   }
 
-  function handleDeleteInvestiment(id: string) {
-    setInvestiments((prev) => prev.filter((inv) => inv.id !== id));
-    setPercentagemTotal(
-      (prev) => prev - investiments.find((inv) => inv.id === id)!.percentage
-    );
-    setInvestimentTotal(
-      (prev) => prev - investiments.find((inv) => inv.id === id)!.total
-    );
-  }
+  const [{ fieldErrors }, handleSubmit, isPending] = useForm({
+    action: upsertInvestmentControlWithTotalAction,
+  });
 
   return (
     <>
       <div className="w-full flex items-center justify-center gap-3 mb-4">
-        <Progress value={percentagemTotal} className="max-w-xs" />
-        <span className="text-sm">{percentagemTotal}%</span>
+        <Progress value={totalPercentage} className="max-w-xs" />
+        <span className="text-sm">{totalPercentage}%</span>
       </div>
 
-      <form className="space-y-5" onSubmit={handleUpsertInvestiment}>
-        <LabelInput
-          label="Total"
-          name="totalInvestment"
-          isCurrency
-          required
-          errors={fieldErros?.totalInvestment}
-        />
+      <form
+        className="space-y-5"
+        onSubmit={(e) => {
+          handleSubmit(e, { guid: editingGuid ?? "new" }).then(() =>
+            handleClearFields()
+          );
+        }}
+      >
+        {investimentsWithTotal.investments?.length > 0 ? (
+          <div>
+            <input
+              type="hidden"
+              name="totalInvestment"
+              value={investimentsWithTotal.totalInvestment * 100}
+            />
+            <label className="block mb-2 font-medium">Total</label>
+            <span
+              className="border px-3 py-2 w-full rounded-md block cursor-default opacity-75"
+              onClick={() =>
+                toast.warning("Exclua todos os ativos para editar o total")
+              }
+            >
+              {numberToCurrency(investimentsWithTotal.totalInvestment)}
+            </span>
+          </div>
+        ) : (
+          <LabelInput
+            label="Total"
+            name="totalInvestment"
+            isCurrency
+            required
+            errors={fieldErrors?.totalInvestment}
+            disabled={investimentsWithTotal.investments?.length > 0}
+          />
+        )}
+
         <div className="flex items-end gap-5 max-sm:flex-col max-sm:items-start">
           <div className="w-full grid grid-cols-2 gap-5 max-sm:grid-cols-1 ">
             <StockSelect
@@ -161,7 +99,7 @@ export const WithTotalForm = () => {
               placeholder="Selecione um ativo"
               name="stock"
               required
-              errors={fieldErros?.stock}
+              errors={fieldErrors?.stock}
               value={stockInput}
               onValueChange={setStockInput}
             />
@@ -173,28 +111,31 @@ export const WithTotalForm = () => {
               value={percentageInput}
               onChange={(e) => setPercentageInput(e.target.value)}
               max={
-                editingId
+                editingGuid
                   ? 100 -
-                    percentagemTotal +
-                    investiments.find((inv) => inv.id === editingId)!.percentage
-                  : 100 - percentagemTotal
+                    totalPercentage +
+                    (investimentsWithTotal.investments.find(
+                      (inv) => inv.guid === editingGuid
+                    )?.percentage ?? 0)
+                  : 100 - totalPercentage
               }
-              errors={fieldErros?.percentage}
+              errors={fieldErrors?.percentage}
             />
           </div>
           <div
             className={cn(
               "flex gap-3 max-sm:self-center",
-              fieldErros && "self-center"
+              fieldErrors && "self-center"
             )}
           >
             <MainButton
               isAddBtn
-              disabled={!editingId && percentagemTotal >= 100}
+              disabled={!editingGuid && totalPercentage >= 100}
+              isLoading={isPending}
             >
-              {editingId ? "Atualizar" : "Adicionar"}
+              {editingGuid ? "Atualizar" : "Adicionar"}
             </MainButton>
-            {editingId && (
+            {editingGuid && (
               <MainButton variant={"secondary"} onClick={handleClearFields}>
                 <X />
                 Cancelar
@@ -218,45 +159,49 @@ export const WithTotalForm = () => {
           </>
         }
         footer={
-          investiments.length > 0 && (
+          investimentsWithTotal.investments?.length > 0 && (
             <TableRow>
               <TableCell colSpan={4}>Total</TableCell>
-              <TableCell className="">
-                {numberToCurrency(investimentTotal)}
-              </TableCell>
+              <TableCell>{numberToCurrency(allStocksTotal)}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           )
         }
       >
-        {investiments && investiments.length > 0 ? (
-          investiments.map((investment) => (
-            <TableRow key={`investiments-${investment.id}`}>
+        {investimentsWithTotal.investments &&
+        investimentsWithTotal.investments.length > 0 ? (
+          investimentsWithTotal.investments.map((investment) => (
+            <TableRow key={`investiments-${investment.guid}`}>
               <TableCell className="flex items-center gap-2 min-w-[130px]">
                 <Image
-                  src={investment.logo}
-                  alt={investment.stock}
+                  src={investment.stock.logo}
+                  alt={investment.stock.name}
                   width={32}
                   height={32}
                   className="rounded-md"
                 />
-                {investment.stock}
+                {investment.stock.name}
               </TableCell>
-              <TableCell>{numberToCurrency(investment.stockPrice)}</TableCell>
-              <TableCell>{investment.stocksAmount}</TableCell>
+              <TableCell>{numberToCurrency(investment.stock.price)}</TableCell>
+              <TableCell>{investment.stockAmount}</TableCell>
               <TableCell>{investment.percentage}%</TableCell>
               <TableCell>{numberToCurrency(investment.total)}</TableCell>
               <TableCell>
                 <TableActionButtons
                   onEdit={() => {
-                    setEditingId(investment.id);
+                    setEditingGuid(investment.guid);
                     setStockInput(
-                      `${investment.stock}|${investment.stockPrice}|${investment.logo}`
+                      `${investment.stock.name}|${investment.stock.price}|${investment.stock.logo}`
                     );
                     setPercentageInput(investment.percentage.toString());
                   }}
-                  onDelete={() => {
-                    handleDeleteInvestiment(investment.id);
+                  onDelete={async () => {
+                    if (editingGuid) {
+                      toast.warning("Cancele a edicao para excluir o ativo.");
+                      return;
+                    }
+
+                    await handleDelete(investment.guid);
                   }}
                 />
               </TableCell>
