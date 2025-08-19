@@ -17,6 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../components/ui/accordion";
+import { ComparisonCard } from "./_components/comparison-card";
 
 export default function Home() {
   const faqs = [
@@ -89,6 +90,41 @@ export default function Home() {
           <CardContent></CardContent>
         </Card>
       </main>
+
+      <section className="mt-36 bg-stone-800 p-16 rounded-4xl max-sm:px-5">
+        <div className="text-center">
+          <h2 className="text-md text-primary mb-1 uppercase font-medium">
+            É MUUUUITA VANTAGEM
+          </h2>
+          <h3 className="text-3xl font-bold text-white">
+            Aporte tradicional vs usando a{" "}
+            <span className="text-primary">Aporte Certo</span>
+          </h3>
+        </div>
+
+        <div className="mt-16 grid grid-cols-2 gap-5 max-[940px]:grid-cols-1">
+          <ComparisonCard
+            title="Tradicional"
+            list={[
+              "+2h escolhendo ativos para aportar",
+              "+4h Cálculando preço teto",
+              "+1h Fazendo simulações",
+              "Sem organização de preços = menor rentabilidade",
+              "Sem planejamento dos ativos = menor rentabilidade",
+              "Sem controle de sua carteira = menor rentabilidade",
+            ]}
+          />
+          <ComparisonCard
+            highline
+            title="Com Aporte Certo"
+            list={[
+              "Organização otimizada de seus investimentos",
+              "Planejamento minimalista na escolha de ativos",
+              "Aumento de rentabilidade e economia de tempo com organização de aportes",
+            ]}
+          />
+        </div>
+      </section>
 
       <section>
         <SectionTitle

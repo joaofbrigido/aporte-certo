@@ -52,7 +52,7 @@ export const PlansCard = ({
               R$79,00
             </span>
           )}
-          <h3 className="text-3xl font-bold">R${price}</h3>
+          <h3 className="text-3xl font-bold">{price}</h3>
         </div>
         <ul className="flex flex-col gap-3 mt-5">{children}</ul>
       </div>
