@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  deleteInvestmentControlWithoutTotalAction,
+  upsertInvestmentControlWithoutTotalAction,
+} from "@/app/actions/investiment-control";
 import { BasicTable } from "@/app/components/shared/basic-table";
 import { LabelInput } from "@/app/components/shared/label-input";
 import { MainButton } from "@/app/components/shared/main-button";
@@ -13,47 +17,25 @@ import {
   ChartTooltipContent,
 } from "@/app/components/ui/chart";
 import { TableCell, TableHead, TableRow } from "@/app/components/ui/table";
+import { useForm } from "@/app/hooks/use-form";
+import { InvestmentControlWithoutTotal } from "@/app/services/investiment-control/types";
 import { numberToCurrency } from "@/app/utils/format-numbers";
 import { DollarSign, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Pie, PieChart } from "recharts";
-import z from "zod";
+import { toast } from "sonner";
 
-type Investiment = {
-  id: string;
-  stock: string;
-  logo: string;
-  stockPrice: number;
-  stocksAmount: number;
-  total: number;
-};
-
-const investimentFormSchema = z.object({
-  stock: z.string().min(1, "Selecione um ativo"),
-  quantity: z
-    .string()
-    .min(1, "Informe a quantidade de cotas")
-    .transform((val) => Number(val)),
-  total: z
-    .string()
-    .min(1, "Informe o valor total")
-    .transform((val) => Number(val.replace(/\D/g, "")) / 100), // remove tudo que não for dígito e divide por 100 (para lidar com centavos)
-});
-
-type FieldErrors = {
-  stock?: string[] | undefined;
-  quantity?: string[] | undefined;
-};
-
-export const WithoutTotalForm = () => {
-  const [investiments, setInvestiments] = useState<Investiment[]>([]);
-  const [fieldErros, FieldErros] = useState<FieldErrors>();
-  const [investimentTotal, setInvestimentTotal] = useState(0);
+export const WithoutTotalForm = ({
+  investments,
+}: {
+  investments: InvestmentControlWithoutTotal[];
+}) => {
   const [stockInput, setStockInput] = useState("");
   const [quantityInput, setQuantityInput] = useState("");
   const [totalInput, setTotalInput] = useState(0);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingGuid, setEditingGuid] = useState<string | null>(null);
+  const totalInvestment = investments.reduce((acc, inv) => acc + inv.total, 0);
 
   function handleChangeQuantity(e: React.ChangeEvent<HTMLInputElement>) {
     if (stockInput) {
@@ -64,67 +46,11 @@ export const WithoutTotalForm = () => {
     }
   }
 
-  function handleClearFields() {
-    setEditingId(null);
+  function clearForm() {
+    setEditingGuid(null);
     setStockInput("");
     setQuantityInput("");
     setTotalInput(0);
-  }
-
-  function handleUpsertInvestiment(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    const rawData = {
-      stock: formData.get("stock")?.toString() || "",
-      quantity: formData.get("quantity")?.toString() || "",
-      total: formData.get("total")?.toString() || "",
-    };
-
-    const result = investimentFormSchema.safeParse(rawData);
-    if (!result.success) {
-      FieldErros(result.error.flatten().fieldErrors);
-      return;
-    }
-
-    FieldErros(undefined);
-
-    const [stockName, stockPrice, stockLogo] = result.data.stock.split("|");
-
-    const newInvestiment: Investiment = {
-      id: editingId ?? crypto.randomUUID(),
-      stock: stockName,
-      logo: stockLogo,
-      stockPrice: Number(stockPrice),
-      stocksAmount: Number(result.data.quantity),
-      total: Number(result.data.total),
-    };
-
-    if (editingId) {
-      const prevInvestment = investiments.find((inv) => inv.id === editingId);
-      if (!prevInvestment) return;
-
-      setInvestiments((prev) =>
-        prev.map((inv) => (inv.id === editingId ? newInvestiment : inv))
-      );
-
-      setInvestimentTotal(
-        (prev) => prev - prevInvestment.total + newInvestiment.total
-      );
-    } else {
-      setInvestiments((prev) => [...prev, newInvestiment]);
-      setInvestimentTotal((prev) => prev + Number(result.data.total));
-    }
-
-    handleClearFields();
-  }
-
-  function handleDeleteInvestiment(id: string) {
-    setInvestiments((prev) => prev.filter((inv) => inv.id !== id));
-    setInvestimentTotal(
-      (prev) => prev - investiments.find((inv) => inv.id === id)!.total || 0
-    );
   }
 
   const chartConfig = {
@@ -162,27 +88,47 @@ export const WithoutTotalForm = () => {
       "var(--color-other)",
     ];
 
-    const totalSum = investiments.reduce((acc, item) => acc + item.total, 0);
-
     let colorIndex = 0;
 
-    return investiments.map((item) => {
+    return investments.map((item) => {
       const fill = fillColors[colorIndex];
       colorIndex = (colorIndex + 1) % fillColors.length;
 
       return {
-        stock: item.stock,
-        percentage: Number(((item.total / totalSum) * 100).toFixed(2)),
+        stock: item.stock.name,
+        percentage: Number(((item.total / totalInvestment) * 100).toFixed(2)),
         fill,
       };
     });
   }
 
+  async function handleDelete(guid: string) {
+    clearForm();
+    const result = await deleteInvestmentControlWithoutTotalAction(guid);
+
+    if (!result.success) {
+      toast.error(result.message);
+      return;
+    }
+
+    toast.success(result.message);
+  }
+
+  const [{ fieldErrors }, handleSubmit, isPending] = useForm({
+    action: upsertInvestmentControlWithoutTotalAction,
+  });
+
   return (
     <>
       <Card>
         <CardContent>
-          <form onSubmit={handleUpsertInvestiment}>
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e, { guid: editingGuid ?? "new" }).then(() =>
+                clearForm()
+              );
+            }}
+          >
             <div className="grid grid-cols-3 gap-5 max-sm:grid-cols-1">
               <StockSelect
                 label="Ativo"
@@ -190,7 +136,7 @@ export const WithoutTotalForm = () => {
                 name="stock"
                 value={stockInput}
                 onValueChange={setStockInput}
-                errors={fieldErros?.stock}
+                errors={fieldErrors?.stock}
                 required
               />
               <LabelInput
@@ -200,7 +146,7 @@ export const WithoutTotalForm = () => {
                 value={quantityInput}
                 onChange={handleChangeQuantity}
                 required
-                errors={fieldErros?.quantity}
+                errors={fieldErrors?.quantity}
               />
               <LabelInput
                 label="Total"
@@ -210,14 +156,14 @@ export const WithoutTotalForm = () => {
               />
             </div>
             <div className="flex gap-3 mt-5 justify-center">
-              {editingId && (
-                <MainButton variant={"secondary"} onClick={handleClearFields}>
+              {editingGuid && (
+                <MainButton variant={"secondary"} onClick={clearForm}>
                   <X />
                   Cancelar
                 </MainButton>
               )}
-              <MainButton isAddBtn>
-                {editingId ? "Atualizar" : "Adicionar"}
+              <MainButton isAddBtn isLoading={isPending}>
+                {editingGuid ? "Atualizar" : "Adicionar"}
               </MainButton>
             </div>
           </form>
@@ -237,44 +183,44 @@ export const WithoutTotalForm = () => {
             </>
           }
           footer={
-            investiments.length > 0 && (
+            investments.length > 0 && (
               <TableRow>
                 <TableCell colSpan={3}>Total</TableCell>
-                <TableCell>{numberToCurrency(investimentTotal)}</TableCell>
+                <TableCell>{numberToCurrency(totalInvestment)}</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             )
           }
         >
-          {investiments && investiments.length > 0 ? (
-            investiments.map((investment) => (
-              <TableRow key={`investiments-${investment.id}`}>
+          {investments && investments.length > 0 ? (
+            investments.map((investment) => (
+              <TableRow key={`investmentsWithoutTotal-${investment.guid}`}>
                 <TableCell className="flex items-center gap-2 min-w-[130px]">
                   <Image
-                    src={investment.logo}
-                    alt={investment.stock}
+                    src={investment.stock.logo}
+                    alt={investment.stock.name}
                     width={32}
                     height={32}
                     className="rounded-md"
                   />
-                  {investment.stock}
+                  {investment.stock.name}
                 </TableCell>
-                <TableCell>{numberToCurrency(investment.stockPrice)}</TableCell>
-                <TableCell>{investment.stocksAmount}</TableCell>
+                <TableCell>
+                  {numberToCurrency(investment.stock.price)}
+                </TableCell>
+                <TableCell>{investment.stockAmount}</TableCell>
                 <TableCell>{numberToCurrency(investment.total)}</TableCell>
                 <TableCell>
                   <TableActionButtons
                     onEdit={() => {
-                      setEditingId(investment.id);
+                      setEditingGuid(investment.guid);
                       setStockInput(
-                        `${investment.stock}|${investment.stockPrice}|${investment.logo}`
+                        `${investment.stock.name}|${investment.stock.price}|${investment.stock.logo}`
                       );
-                      setQuantityInput(investment.stocksAmount.toString());
+                      setQuantityInput(investment.stockAmount.toString());
                       setTotalInput(investment.total);
                     }}
-                    onDelete={() => {
-                      handleDeleteInvestiment(investment.id);
-                    }}
+                    onDelete={async () => await handleDelete(investment.guid)}
                   />
                 </TableCell>
               </TableRow>
@@ -299,7 +245,7 @@ export const WithoutTotalForm = () => {
                 <DollarSign className="text-primary size-5" />
               </div>
               <h3 className="text-4xl font-bold">
-                {numberToCurrency(investimentTotal)}
+                {numberToCurrency(totalInvestment)}
               </h3>
             </CardContent>
           </Card>

@@ -9,13 +9,20 @@ import { ChartPie, Infinity } from "lucide-react";
 import { TabWithTotal } from "./_components/tab-with-total";
 import { TabWithoutTotal } from "./_components/tab-without-total";
 import { cookies } from "next/headers";
-import { InvestmentControlWithTotal } from "@/app/services/investiment-control/types";
+import {
+  InvestmentControlWithoutTotal,
+  InvestmentControlWithTotal,
+} from "@/app/services/investiment-control/types";
 
 export default async function ControleDoAportePage() {
   const cookieStore = await cookies();
+
   const investimentsWithTotal = JSON.parse(
     cookieStore.get("InvestmentControlWithTotal")?.value || "{}"
   ) as InvestmentControlWithTotal;
+  const investimentsWithoutTotal = JSON.parse(
+    cookieStore.get("InvestmentsControlWithoutTotal")?.value || "[]"
+  ) as InvestmentControlWithoutTotal[];
 
   return (
     <>
@@ -42,7 +49,7 @@ export default async function ControleDoAportePage() {
           <TabWithTotal investimentsWithTotal={investimentsWithTotal} />
         </TabsContent>
         <TabsContent value={"sem-total"}>
-          <TabWithoutTotal />
+          <TabWithoutTotal investmentsWithoutTotal={investimentsWithoutTotal} />
         </TabsContent>
       </Tabs>
     </>

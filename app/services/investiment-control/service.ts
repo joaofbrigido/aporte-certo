@@ -1,6 +1,10 @@
 import { cookies } from "next/headers";
-import { InvestmentControlWithTotal } from "./types";
+import {
+  InvestmentControlWithoutTotal,
+  InvestmentControlWithTotal,
+} from "./types";
 
+// COM TOTAL
 export async function createInvestmentControlWithTotalCookie(
   investimentControl: InvestmentControlWithTotal
 ) {
@@ -150,4 +154,87 @@ export function calculateStockAmount(
   sotckPrice: number
 ) {
   return Math.ceil((totalInvestment * (percentage / 100)) / sotckPrice);
+}
+
+// SEM TOTAL
+export async function createInvestmentControlWithoutTotalCookie(
+  newInvestment: InvestmentControlWithoutTotal
+) {
+  try {
+    const cookieStore = await cookies();
+    const savedInvestments = JSON.parse(
+      cookieStore.get("InvestmentsControlWithoutTotal")?.value || "[]"
+    ) as InvestmentControlWithoutTotal[];
+
+    savedInvestments.push(newInvestment);
+    cookieStore.set(
+      "InvestmentsControlWithoutTotal",
+      JSON.stringify(savedInvestments)
+    );
+
+    return { success: true, message: null };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message:
+        "Erro ao adicionar ativo (controle aporte - sem total) no cookie.",
+    };
+  }
+}
+
+export async function updateInvestmentControlWithoutTotalCookie({
+  guid,
+  editedInvestment,
+}: {
+  guid: string;
+  editedInvestment: InvestmentControlWithoutTotal;
+}) {
+  try {
+    const cookieStore = await cookies();
+    const savedInvestments = JSON.parse(
+      cookieStore.get("InvestmentsControlWithoutTotal")?.value || "[]"
+    ) as InvestmentControlWithoutTotal[];
+    const index = savedInvestments.findIndex((cp) => cp.guid === guid);
+
+    savedInvestments[index] = editedInvestment;
+    cookieStore.set(
+      "InvestmentsControlWithoutTotal",
+      JSON.stringify(savedInvestments)
+    );
+
+    return { success: true, message: null };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message:
+        "Erro ao atualizar ativo (controle aporte - sem total) no cookie.",
+    };
+  }
+}
+
+export async function deleteInvestmentControlWithoutTotalCookie(guid: string) {
+  try {
+    const cookieStore = await cookies();
+    const savedInvestiments = JSON.parse(
+      cookieStore.get("InvestmentsControlWithoutTotal")?.value || "[]"
+    ) as InvestmentControlWithoutTotal[];
+
+    const filteredInvestments = savedInvestiments.filter(
+      (investment) => investment.guid !== guid
+    );
+    cookieStore.set(
+      "InvestmentsControlWithoutTotal",
+      JSON.stringify(filteredInvestments)
+    );
+
+    return { success: true, message: null };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Erro ao deletar ativo (controle aporte - sem total) no cookie.",
+    };
+  }
 }

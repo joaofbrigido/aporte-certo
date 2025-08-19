@@ -1,8 +1,13 @@
 import { Card, CardContent } from "@/app/components/ui/card";
 import { Info } from "lucide-react";
 import { WithoutTotalForm } from "./without-total-form";
+import { InvestmentControlWithoutTotal } from "@/app/services/investiment-control/types";
 
-export const TabWithoutTotal = () => {
+export const TabWithoutTotal = ({
+  investmentsWithoutTotal,
+}: {
+  investmentsWithoutTotal: InvestmentControlWithoutTotal[];
+}) => {
   return (
     <section className="space-y-5">
       <Card>
@@ -13,7 +18,7 @@ export const TabWithoutTotal = () => {
         </CardContent>
       </Card>
 
-      <WithoutTotalForm />
+      <WithoutTotalForm investments={investmentsWithoutTotal} />
     </section>
   );
 };

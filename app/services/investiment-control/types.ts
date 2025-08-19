@@ -13,3 +13,14 @@ export type InvestmentControlWithTotal = {
     total: number;
   }[];
 };
+
+export type InvestmentControlWithoutTotal = {
+  guid: string;
+  stock: {
+    name: string;
+    price: number;
+    logo: string;
+  };
+  stockAmount: number;
+  total: number;
+};

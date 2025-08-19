@@ -34,14 +34,21 @@ export const WithTotalForm = ({
     0
   );
 
-  function handleClearFields() {
+  function clearForm() {
     setEditingGuid(null);
     setStockInput("");
     setPercentageInput("");
   }
 
   async function handleDelete(guid: string) {
+    clearForm();
     const result = await deleteInvestmentControlWithTotalAction(guid);
+
+    if (!result.success) {
+      toast.error(result.message);
+      return;
+    }
+
     toast.success(result.message);
   }
 
@@ -60,7 +67,7 @@ export const WithTotalForm = ({
         className="space-y-5"
         onSubmit={(e) => {
           handleSubmit(e, { guid: editingGuid ?? "new" }).then(() =>
-            handleClearFields()
+            clearForm()
           );
         }}
       >
@@ -136,7 +143,7 @@ export const WithTotalForm = ({
               {editingGuid ? "Atualizar" : "Adicionar"}
             </MainButton>
             {editingGuid && (
-              <MainButton variant={"secondary"} onClick={handleClearFields}>
+              <MainButton variant={"secondary"} onClick={clearForm}>
                 <X />
                 Cancelar
               </MainButton>
@@ -195,14 +202,7 @@ export const WithTotalForm = ({
                     );
                     setPercentageInput(investment.percentage.toString());
                   }}
-                  onDelete={async () => {
-                    if (editingGuid) {
-                      toast.warning("Cancele a edicao para excluir o ativo.");
-                      return;
-                    }
-
-                    await handleDelete(investment.guid);
-                  }}
+                  onDelete={async () => await handleDelete(investment.guid)}
                 />
               </TableCell>
             </TableRow>

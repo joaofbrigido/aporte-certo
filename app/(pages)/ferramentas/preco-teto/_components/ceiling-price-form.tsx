@@ -41,7 +41,8 @@ export const CeilingPriceForm = ({
     setDpaInput(ceilingPrice.dpa.toFixed(2).toString());
   }
 
-  async function handleDeleteCeilingPrice(guid: string) {
+  async function handleDelete(guid: string) {
+    clearForm();
     const response = await deleteCeilingPriceAction(guid);
 
     if (!response.success) {
@@ -49,7 +50,7 @@ export const CeilingPriceForm = ({
       return;
     }
 
-    toast.success("Ativo deletado com sucesso!");
+    toast.success(response.message);
   }
 
   const [{ fieldErrors }, handleSubmit, isPending] = useForm({
@@ -121,7 +122,7 @@ export const CeilingPriceForm = ({
       <CeilingPriceTable
         ceilingPrices={ceilingPrices}
         onEdit={handleEditCeilingPrice}
-        onDelete={handleDeleteCeilingPrice}
+        onDelete={handleDelete}
       />
     </>
   );
