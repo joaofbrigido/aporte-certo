@@ -13,6 +13,30 @@ import {
   InvestmentControlWithoutTotal,
   InvestmentControlWithTotal,
 } from "@/app/services/investiment-control/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Simulador de Aportes | Calculadora de Preço do Aporte | Aporte Certo",
+  description:
+    "Simule aportes mensais e descubra quanto investir em cada ativo de forma equilibrada. Planeje seus aportes com clareza e aumente sua rentabilidade.",
+  keywords: [
+    "simulador de aportes",
+    "calculadora de aportes",
+    "quanto investir em cada ação",
+    "aporte mensal investimentos",
+    "planejamento de aportes",
+    "simulação de carteira de ações",
+  ],
+  openGraph: {
+    title: "Simulador de Aportes | Planeje seus Investimentos",
+    description:
+      "Defina quanto investir em cada ativo com nossa calculadora de aportes. Planeje sua carteira de forma prática e organizada.",
+    url: "https://aportecerto.com/ferramentas/controle-do-aporte",
+    siteName: "Aporte Certo",
+    locale: "pt_BR",
+    type: "website",
+  },
+};
 
 export default async function ControleDoAportePage() {
   const cookieStore = await cookies();

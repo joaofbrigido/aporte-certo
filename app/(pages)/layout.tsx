@@ -14,8 +14,37 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Aporte Certo",
-  description: "Ferramentas para ajudar nos investimentos",
+  title: "Aporte Certo | Calculadora de Preço Teto, Aportes e Juros Compostos",
+  description:
+    "Use o Aporte Certo para economizar tempo nos seus investimentos. Calculadora de Preço Teto (método Bazin), simulador de aportes mensais, juros compostos com inflação e muito mais.",
+  keywords: [
+    "calculadora de investimentos",
+    "calculadora preço teto",
+    "método Décio Bazin",
+    "simulador de juros compostos",
+    "simulador de aportes",
+    "calculadora de dividendos",
+    "ferramentas para investidores",
+    "planejamento financeiro",
+    "investimentos em ações",
+    "simulação de aportes mensais",
+    "calculadora de juros compostos",
+  ],
+  openGraph: {
+    title: "Aporte Certo | Calculadora de Investimentos Inteligente",
+    description:
+      "Economize tempo nos cálculos e maximize seus investimentos. Simule preço teto, aportes e juros compostos em segundos.",
+    url: "https://aportecerto.com.br",
+    siteName: "Aporte Certo",
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aporte Certo | Calculadora de Investimentos Inteligente",
+    description:
+      "Ferramentas essenciais para investidores: preço teto, aportes e juros compostos.",
+  },
 };
 
 export default function RootLayout({

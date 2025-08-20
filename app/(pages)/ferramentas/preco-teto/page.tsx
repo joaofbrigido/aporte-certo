@@ -4,6 +4,31 @@ import { Info } from "lucide-react";
 import { CeilingPriceForm } from "./_components/ceiling-price-form";
 import { cookies } from "next/headers";
 import { CeilingPrice } from "@/app/services/ceiling-price/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Calculadora de Preço Teto | Método Décio Bazin | Aporte Certo",
+  description:
+    "Descubra o preço teto de uma ação pelo método Décio Bazin. Calcule automaticamente quanto pagar por cada ativo e invista com segurança.",
+  keywords: [
+    "calculadora preço teto",
+    "preço teto Décio Bazin",
+    "método Bazin",
+    "ações descontadas",
+    "quanto pagar por ação",
+    "investir em dividendos",
+    "calculadora de ações",
+  ],
+  openGraph: {
+    title: "Calculadora de Preço Teto | Método Décio Bazin",
+    description:
+      "Calcule o preço teto de ações pelo método Décio Bazin em segundos. Invista melhor e evite pagar caro por ativos.",
+    url: "https://aportecerto.com.com/ferramentas/preco-teto",
+    siteName: "Aporte Certo",
+    locale: "pt_BR",
+    type: "website",
+  },
+};
 
 export default async function PrecoTetoPage() {
   const cookieStore = await cookies();
