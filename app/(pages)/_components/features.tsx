@@ -37,24 +37,28 @@ export const Features = () => {
 
   return (
     <div className="flex items-center justify-between gap-5 mt-16 max-lg:flex-col">
-      <ul className="space-y-4">
-        {features.map((feature, index) => (
-          <li
-            key={feature.title + index}
-            onClick={() => setActiveIndex(index)}
-            className={cn(
-              "p-5 rounded-lg hover:bg-accent transition cursor-pointer",
-              activeIndex === index && "bg-accent border"
-            )}
-          >
-            <h4 className="font-semibold text-lg flex gap-3 items-center">
-              {feature.icon}
-              {feature.title}
-            </h4>
-            <p className="mt-4 text-muted-foreground">{feature.description}</p>
-          </li>
-        ))}
-      </ul>
+      <div className="overflow-x-auto max-w-full">
+        <ul className="flex flex-col gap-4 max-lg:flex-row max-lg:overflow-x-auto">
+          {features.map((feature, index) => (
+            <li
+              key={feature.title + index}
+              onClick={() => setActiveIndex(index)}
+              className={cn(
+                "p-5 min-w-[235px] rounded-lg hover:bg-accent transition cursor-pointer",
+                activeIndex === index && "bg-accent border"
+              )}
+            >
+              <h4 className="font-semibold text-lg flex gap-3 items-center">
+                {feature.icon}
+                {feature.title}
+              </h4>
+              <p className="mt-4 text-muted-foreground">
+                {feature.description}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="w-2/3 max-lg:w-full">
         <Image
