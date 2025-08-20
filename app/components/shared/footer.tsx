@@ -46,10 +46,10 @@ export const Footer = () => {
 
         <div className="flex flex-col gap-0.5">
           <h3 className="font-semibold">Legal</h3>
-          <Link href="#" className="hover:underline">
+          <Link href="/termos-de-uso" className="hover:underline">
             Termos de uso
           </Link>
-          <Link href="#" className="hover:underline">
+          <Link href="/politicas-de-privacidade" className="hover:underline">
             Políticas de privacidade
           </Link>
           <p>suporte.aportecerto@gmail.com</p>

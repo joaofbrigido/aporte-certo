@@ -11,7 +11,7 @@ export const Features = () => {
       title: "Preço de Aportes",
       icon: <HandCoins />,
       description:
-        "Otimize suas compras e maximize os lucros com base em suas estratégias de investimento",
+        "Otimize suas compras fazendo simulações de aportes em segundos, evitando erros e economizando tempo",
       active: false,
       image: "/aporte.jpg",
     },
