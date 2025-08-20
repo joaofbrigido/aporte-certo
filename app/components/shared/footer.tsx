@@ -10,9 +10,9 @@ export const Footer = () => {
             src="/logo-aportecerto.png"
             alt="Aporte Certo Logo"
             width={300}
-            height={300}
+            height={150}
             priority
-            className="w-[171px] h-[36px] object-contain mb-2 max-md:mx-auto"
+            className="w-[170px] h-[35px] object-contain mb-2 max-md:mx-auto"
           />
           <p>Ferramentas para Maximizar Seus Investimentos.</p>
           <p>Copyright © 2025 - Todos os direitos reservados</p>

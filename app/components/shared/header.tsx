@@ -11,9 +11,9 @@ export const Header = () => {
             src="/logo-aportecerto.png"
             alt="Aporte Certo Logo"
             width={300}
-            height={300}
+            height={150}
             priority
-            className="w-[171px] h-[36px] object-contain"
+            className="w-[170px] h-[35px] object-contain"
           />
         </Link>
 
