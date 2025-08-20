@@ -56,15 +56,15 @@ export default function Home() {
     <>
       <main className="pt-12 mainContainer relative">
         <h1 className="text-5xl font-bold text-center max-w-3xl m-auto max-md:text-3xl leading-16 max-md:leading-10 ">
-          Ferramentas Essenciais para{" "}
+          Decida seus investimentos em minutos, não{" "}
           <span className="relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-primary before:rounded">
-            <span className="relative text-secondary px-2">Maximizar</span>
+            <span className="relative text-secondary px-2">em horas</span>
           </span>{" "}
-          Seus Investimentos
         </h1>
         <p className="mt-4 m-auto text-lg text-muted-foreground text-center max-w-xl">
-          Preço teto, juros compostos e muito mais. Aumente seu rendimento com
-          nossas calculadoras inteligentes.
+          Nossas calculadoras economiza horas de planilhas e cálculos. Tenha
+          clareza sobre preço teto, aportes ideais e juros compostos para
+          investir melhor e ganhar mais.
         </p>
 
         <div className="flex justify-center mt-8">
@@ -111,7 +111,7 @@ export default function Home() {
                 "+4h Cálculando preço teto",
                 "+1h Fazendo simulações",
                 "Sem organização de preços = menor rentabilidade",
-                "Sem planejamento dos ativos = menor rentabilidade",
+                "Sem planejamento de aportes = menor rentabilidade",
                 "Sem controle de sua carteira = menor rentabilidade",
               ]}
             />
@@ -119,9 +119,10 @@ export default function Home() {
               highline
               title="Com Aporte Certo"
               list={[
-                "Organização minimalista de seus investimentos",
-                "Planejamento otimizado na escolha de ativos",
-                "Aumento de rentabilidade e economia de tempo com organização de aportes",
+                "Simulação de aportes em segundos",
+                "Preço teto calculado automaticamente",
+                "Juros compostos ajustados à inflação",
+                "Decisões rápidas e seguras para aumentar seu rendimento",
               ]}
             />
           </div>
