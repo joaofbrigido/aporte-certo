@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ModeToggle } from "./mode-toggle";
+import { HeaderNav } from "./header-nav";
 
 export const Header = () => {
   return (
@@ -16,6 +17,8 @@ export const Header = () => {
             className="w-[170px] h-[35px] object-contain"
           />
         </Link>
+
+        <HeaderNav />
 
         <ModeToggle />
       </div>

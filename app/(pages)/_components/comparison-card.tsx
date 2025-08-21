@@ -1,3 +1,6 @@
+"use client";
+
+import { AnimateContent } from "@/app/components/shared/animate-content";
 import { cn } from "@/app/lib/utils";
 import { CircleCheck, CircleX } from "lucide-react";
 import React from "react";
@@ -12,11 +15,13 @@ export const ComparisonCard = ({
   list: string[];
 }) => {
   return (
-    <div
-      className={cn(
-        "border-2 text-white p-6 rounded-2xl space-y-8 border-stone-500",
-        highline && "border-primary"
-      )}
+    <AnimateContent
+      config={{
+        className: cn(
+          "border-2 text-white p-6 rounded-2xl space-y-8 border-stone-500",
+          highline && "border-primary"
+        ),
+      }}
     >
       <div className="flex justify-between gap-4 items-center">
         <h4 className="font-bold text-2xl">{title}</h4>
@@ -37,6 +42,6 @@ export const ComparisonCard = ({
           </li>
         ))}
       </ul>
-    </div>
+    </AnimateContent>
   );
 };

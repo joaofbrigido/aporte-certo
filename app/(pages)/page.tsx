@@ -13,6 +13,8 @@ import {
 import { ComparisonCard } from "./_components/comparison-card";
 import Image from "next/image";
 import { Features } from "./_components/features";
+import { TextEffect } from "../components/ui/text-effect";
+import { AnimateContent } from "../components/shared/animate-content";
 
 export default function Home() {
   const faqs = [
@@ -56,39 +58,66 @@ export default function Home() {
     <>
       <main className="pt-12 mainContainer relative">
         <h1 className="text-5xl font-bold text-center max-w-3xl m-auto max-md:text-3xl leading-16 max-md:leading-10 ">
-          Decida seus investimentos em minutos, não{" "}
-          <span className="relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-primary before:rounded">
+          <TextEffect
+            as="span"
+            preset="fade-in-blur"
+            speedReveal={1.1}
+            speedSegment={0.3}
+          >
+            Decida seus investimentos em minutos, não
+          </TextEffect>{" "}
+          <AnimateContent
+            as="span"
+            config={{
+              className:
+                "relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-primary before:rounded",
+              transition: { delay: 0.9, duration: 0.4 },
+              initial: { opacity: 0, y: 20 },
+            }}
+          >
             <span className="relative text-secondary px-2">em horas</span>
-          </span>{" "}
+          </AnimateContent>
         </h1>
-        <p className="mt-4 m-auto text-lg text-muted-foreground text-center max-w-xl">
+        <TextEffect
+          as="p"
+          per="line"
+          delay={1}
+          preset="fade-in-blur"
+          speedReveal={1}
+          speedSegment={0.6}
+          className="mt-4 m-auto text-lg text-muted-foreground text-center max-w-xl"
+        >
           Nossas calculadoras economiza horas de planilhas e cálculos. Tenha
           clareza sobre preço teto, aportes ideais e juros compostos para
           investir melhor e ganhar mais.
-        </p>
+        </TextEffect>
 
-        <div className="flex justify-center mt-8">
-          <Button asChild size="lg" className="text-md !px-6">
-            <Link href="/ferramentas/controle-do-aporte">
-              Calculadoras
-              <ArrowUpRight />
-            </Link>
-          </Button>
-        </div>
-        <span className="block text-sm text-muted-foreground mt-1 text-center">
-          Comece gratuitamente
-        </span>
+        <AnimateContent config={{ transition: { delay: 1.5 } }}>
+          <div className="flex justify-center mt-8">
+            <Button asChild size="lg" className="text-md !px-6">
+              <Link href="/ferramentas/controle-do-aporte">
+                Calculadoras
+                <ArrowUpRight />
+              </Link>
+            </Button>
+          </div>
+          <span className="block text-sm text-muted-foreground mt-1 text-center">
+            Comece gratuitamente
+          </span>
+        </AnimateContent>
 
-        <div className="absolute left-1/2 -translate-x-1/2 -z-100 w-[90%] h-60 bg-primary blur-[85px] opacity-50 dark:opacity-40 rounded-full" />
+        <AnimateContent config={{ transition: { delay: 1.7 } }}>
+          <div className="absolute left-1/2 -translate-x-1/2 -z-100 w-[90%] h-60 bg-primary blur-[85px] opacity-50 dark:opacity-40 rounded-full" />
 
-        <Image
-          src="/hero-ap.png"
-          alt="Hero"
-          width={1400}
-          height={950}
-          className="mt-16 rounded-3xl w-full object-cover border-8 mx-auto shadow-2xl"
-          priority
-        />
+          <Image
+            src="/hero-ap.png"
+            alt="Hero"
+            width={1400}
+            height={950}
+            className="mt-16 rounded-3xl w-full object-cover border-8 mx-auto shadow-2xl"
+            priority
+          />
+        </AnimateContent>
       </main>
 
       <section className="bg-stone-800 pb-28 pt-44 px-5 -mt-16">
@@ -130,19 +159,25 @@ export default function Home() {
       </section>
 
       <div className="mainContainer">
-        <section>
+        <section id="features">
           <SectionTitle
             title="Funcionalidades"
             subtitle="Descubra as Nossas Calculadoras Poderosas"
           />
 
-          <Features />
+          <AnimateContent>
+            <Features />
+          </AnimateContent>
         </section>
 
-        <section>
+        <section id="prices">
           <SectionTitle title="Planos" subtitle="Invista em Suas Decisões" />
 
-          <div className="grid grid-cols-2 gap-5 mt-16 max-md:grid-cols-1">
+          <AnimateContent
+            config={{
+              className: "grid grid-cols-2 gap-5 mt-16 max-md:grid-cols-1",
+            }}
+          >
             <PlansCard name="Free" price="R$0,00" plan="free">
               <PlansCardItem title="Acesso a todas as novas calculadoras" />
               <PlansCardItem title="Sem anúncios" notSupport />
@@ -161,24 +196,26 @@ export default function Home() {
               <PlansCardItem title="Suporte via email" />
               <PlansCardItem title="Exportação de tabelas em excel" />
             </PlansCard>
-          </div>
+          </AnimateContent>
         </section>
 
-        <section>
+        <section id="faq">
           <SectionTitle title="Faq" subtitle="Dúvidas Frequentes" />
 
-          <Accordion type="single" collapsible className="mt-16">
-            {faqs.map((faq) => (
-              <AccordionItem value={`faq-${faq.id}`} key={`FAQ-${faq.id}`}>
-                <AccordionTrigger className="cursor-pointer text-lg">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-base">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <AnimateContent>
+            <Accordion type="single" collapsible className="mt-16">
+              {faqs.map((faq) => (
+                <AccordionItem value={`faq-${faq.id}`} key={`FAQ-${faq.id}`}>
+                  <AccordionTrigger className="cursor-pointer text-lg">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-base">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </AnimateContent>
         </section>
       </div>
     </>
