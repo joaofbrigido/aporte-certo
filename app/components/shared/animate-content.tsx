@@ -16,7 +16,7 @@ export const AnimateContent = ({
     initial: { opacity: 0, y: 35 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
-    transition: { delay: 0.3 },
+    transition: { delay: 0.3, duration: 0.4 },
   } as HTMLMotionProps<"div">;
 
   return (
