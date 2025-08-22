@@ -55,6 +55,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning={true}>
+      <head>
+        <meta
+          name="google-adsense-account"
+          content={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}
+        />
+      </head>
+
       <body className={`${dmSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
