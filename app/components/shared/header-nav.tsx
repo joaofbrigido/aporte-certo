@@ -22,11 +22,6 @@ export function HeaderNav() {
           </Link>
         </li>
         <li>
-          <Link href="#faq" className="hover:underline">
-            Faq
-          </Link>
-        </li>
-        <li>
           <Link
             href="/ferramentas/controle-do-aporte"
             className="hover:underline"
