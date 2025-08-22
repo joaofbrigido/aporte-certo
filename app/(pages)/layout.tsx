@@ -55,12 +55,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning={true}>
-      <body className={`${dmSans.className} antialiased`}>
+      <head>
         <Script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}`}
           crossOrigin="anonymous"
+          strategy="afterInteractive"
         ></Script>
+      </head>
+
+      <body className={`${dmSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
