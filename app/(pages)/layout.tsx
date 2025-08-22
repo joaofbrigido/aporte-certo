@@ -6,7 +6,7 @@ import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Header } from "../components/shared/header";
 import { Toaster } from "../components/ui/sonner";
-import Script from "next/script";
+import { AdsenseScript } from "../components/shared/adsense-script";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -55,15 +55,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning={true}>
-      <head>
-        <Script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        ></Script>
-      </head>
-
       <body className={`${dmSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
@@ -71,7 +62,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <AdsenseScript />
           <NextTopLoader color="#f0b100" />
+
           <Header />
           {children}
           <Toaster richColors />
