@@ -7,6 +7,7 @@ import "./globals.css";
 import { Header } from "../components/shared/header";
 import { Toaster } from "../components/ui/sonner";
 import { AdsenseScript } from "../components/shared/adsense-script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -78,6 +79,7 @@ export default function RootLayout({
           <Footer />
         </ThemeProvider>
       </body>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!} />
     </html>
   );
 }
