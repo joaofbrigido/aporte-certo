@@ -14,7 +14,6 @@ import {
   InvestmentControlWithTotal,
 } from "@/app/services/investiment-control/types";
 import { Metadata } from "next";
-import { Card, CardContent } from "@/app/components/ui/card";
 
 export const metadata: Metadata = {
   title: "Simulador de Aportes | Calculadora de Preço do Aporte | Aporte Certo",
@@ -77,60 +76,6 @@ export default async function ControleDoAportePage() {
           <TabWithoutTotal investmentsWithoutTotal={investimentsWithoutTotal} />
         </TabsContent>
       </Tabs>
-
-      <section className="mt-5">
-        <Card>
-          <CardContent className="prose prose-sm dark:prose-invert max-w-none">
-            <h1 className="text-2xl font-bold mb-4">
-              Explicação da Calculadora de Controle de Aportes
-            </h1>
-            <p>
-              Essa calculadora foi criada para ajudar você a{" "}
-              <strong>planejar como distribuir seus aportes</strong> entre
-              diferentes ativos. Ela possui dois modos de uso:
-            </p>
-            <ul className="list-disc list-inside mt-3">
-              <li>
-                <strong>Com Total:</strong> defina um valor total para investir
-                e distribua em percentuais entre os ativos. O resultado será a{" "}
-                <em>quantidade de cotas necessárias</em> para alcançar essa
-                alocação.
-              </li>
-              <li>
-                <strong>Sem Total:</strong> informe as quantidades de cotas de
-                cada ativo e descubra o <em>valor total do seu aporte</em>.
-              </li>
-            </ul>
-
-            <h2 className="text-xl font-semibold mt-6 mb-3">Quando usar</h2>
-            <ul className="list-disc list-inside space-y-1">
-              <li>
-                Planejar aportes mensais de forma proporcional entre diferentes
-                ativos.
-              </li>
-              <li>
-                Estimar rapidamente o valor total de um conjunto de compras.
-              </li>
-              <li>Rebalancear sua carteira respeitando percentuais-alvo.</li>
-            </ul>
-
-            <h2 className="text-xl font-semibold mt-6 mb-3">Boas práticas</h2>
-            <ul className="list-disc list-inside space-y-1">
-              <li>
-                Defina previamente sua alocação-alvo (ex.: 50% ações, 30% FIIs,
-                20% renda fixa).
-              </li>
-              <li>
-                Use constância: mantenha percentuais próximos a cada aporte.
-              </li>
-              <li>
-                Teste cenários próximos caso o preço das cotas não permita bater
-                a proporção exata.
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
-      </section>
     </>
   );
 }

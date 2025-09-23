@@ -63,7 +63,9 @@ export default function RootLayout({
         />
       </head>
 
-      <body className={`${dmSans.className} antialiased`}>
+      <body
+        className={`${dmSans.className} antialiased flex min-h-screen flex-col`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -73,11 +75,16 @@ export default function RootLayout({
           <AdsenseScript />
           <NextTopLoader color="#f0b100" />
 
-          <Header />
-          {children}
+          <div className="flex-1 flex flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+          </div>
+
           <Toaster richColors />
           <Footer />
         </ThemeProvider>
+
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!} />
       </body>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!} />
     </html>
