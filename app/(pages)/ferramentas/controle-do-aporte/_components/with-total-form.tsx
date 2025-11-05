@@ -11,7 +11,7 @@ import { cn } from "@/app/lib/utils";
 import { numberToCurrency } from "@/app/utils/format-numbers";
 import Image from "next/image";
 import { Progress } from "@/app/components/ui/progress";
-import { X } from "lucide-react";
+import { FileDown, X } from "lucide-react";
 import { useForm } from "@/app/hooks/use-form";
 import { InvestmentControlWithTotal } from "@/app/services/investiment-control/types";
 import {
@@ -19,6 +19,8 @@ import {
   upsertInvestmentControlWithTotalAction,
 } from "@/app/actions/investiment-control";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export const WithTotalForm = ({
   investimentsWithTotal,
@@ -55,6 +57,50 @@ export const WithTotalForm = ({
   const [{ fieldErrors }, handleSubmit, isPending] = useForm({
     action: upsertInvestmentControlWithTotalAction,
   });
+
+  function handleExportPdf() {
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text("Relatório de Investimentos", 14, 15);
+
+    const tableColumn = [
+      "Ativo",
+      "Preço Unitário",
+      "Qtd Cotas",
+      "Porcentagem",
+      "Preço Total",
+    ];
+
+    const tableRows =
+      investimentsWithTotal.investments?.map((inv) => [
+        inv.stock.name,
+        numberToCurrency(inv.stock.price),
+        inv.stockAmount,
+        `${inv.percentage}%`,
+        numberToCurrency(inv.total),
+      ]) ?? [];
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 25,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [240, 177, 0], textColor: [115, 62, 10] },
+    });
+
+    const total =
+      investimentsWithTotal.investments?.reduce(
+        (acc, inv) => acc + inv.total,
+        0
+      ) ?? 0;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const finalY = (doc as any).lastAutoTable.finalY ?? 0;
+    doc.text(`Total: ${numberToCurrency(total)}`, 14, finalY + 10);
+
+    doc.save("aportes.pdf");
+  }
 
   return (
     <>
@@ -142,6 +188,18 @@ export const WithTotalForm = ({
             >
               {editingGuid ? "Atualizar" : "Adicionar"}
             </MainButton>
+
+            {investimentsWithTotal.investments?.length > 0 && (
+              <MainButton
+                type="button"
+                variant="outline"
+                onClick={handleExportPdf}
+              >
+                <FileDown />
+                Baixar PDF
+              </MainButton>
+            )}
+
             {editingGuid && (
               <MainButton variant={"secondary"} onClick={clearForm}>
                 <X />
