@@ -7,7 +7,7 @@ import "./globals.css";
 import { Header } from "../components/shared/header";
 import { Toaster } from "../components/ui/sonner";
 import { AdsenseScript } from "../components/shared/adsense-script";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -61,6 +61,24 @@ export default function RootLayout({
           name="google-adsense-account"
           content={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}
         />
+
+        {/* Google Analytics - Script principal */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+          strategy="afterInteractive"
+        />
+
+        {/* Google Analytics - Config */}
+        <Script id="ga-config" strategy="afterInteractive">
+          {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}', {
+          page_path: window.location.pathname,
+        });
+      `}
+        </Script>
       </head>
 
       <body
@@ -83,10 +101,7 @@ export default function RootLayout({
           <Toaster richColors />
           <Footer />
         </ThemeProvider>
-
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!} />
       </body>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!} />
     </html>
   );
 }
