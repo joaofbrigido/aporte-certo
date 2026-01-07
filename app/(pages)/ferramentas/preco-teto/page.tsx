@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title: "Calculadora de Preço Teto | Método Décio Bazin",
     description:
       "Calcule o preço teto de ações pelo método Décio Bazin em segundos. Invista melhor e evite pagar caro por ativos.",
-    url: "https://aportecerto.com.com/ferramentas/preco-teto",
+    url: "https://aportecerto.com.br/ferramentas/preco-teto",
     siteName: "Aporte Certo",
     locale: "pt_BR",
     type: "website",

@@ -2,7 +2,11 @@ import { cn } from "@/app/lib/utils";
 import Link from "next/link";
 
 type ToolsTabsProps = {
-  active: "controle-do-aporte" | "juros-compostos" | "preco-teto";
+  active:
+    | "controle-do-aporte"
+    | "juros-compostos"
+    | "preco-teto"
+    | "minha-carteira";
 };
 
 export const ToolsTabs = ({ active }: ToolsTabsProps) => {
@@ -36,6 +40,15 @@ export const ToolsTabs = ({ active }: ToolsTabsProps) => {
         )}
       >
         Preço Teto
+      </Link>
+      <Link
+        href="minha-carteira"
+        className={cn(
+          "px-3 py-1.5 rounded-md opacity-70 hover:bg-background transition",
+          active === "minha-carteira" && "bg-background font-medium opacity-100"
+        )}
+      >
+        Minha Carteira
       </Link>
     </div>
   );

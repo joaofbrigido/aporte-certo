@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title: "Simulador de Aportes | Planeje seus Investimentos",
     description:
       "Defina quanto investir em cada ativo com nossa calculadora de aportes. Planeje sua carteira de forma prática e organizada.",
-    url: "https://aportecerto.com/ferramentas/controle-do-aporte",
+    url: "https://aportecerto.com.br/ferramentas/controle-do-aporte",
     siteName: "Aporte Certo",
     locale: "pt_BR",
     type: "website",

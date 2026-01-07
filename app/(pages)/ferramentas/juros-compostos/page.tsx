@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     title: "Calculadora de Juros Compostos com Inflação",
     description:
       "Calcule o rendimento real dos seus investimentos com juros compostos, aportes mensais e inflação.",
-    url: "https://aportecerto.com/ferramentas/juros-compostos",
+    url: "https://aportecerto.com.br/ferramentas/juros-compostos",
     siteName: "Aporte Certo",
     locale: "pt_BR",
     type: "website",
