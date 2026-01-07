@@ -183,10 +183,7 @@ export default function Home() {
               <PlansCardItem title="Sem anúncios" notSupport />
               <PlansCardItem title="Mantem os dados salvos" notSupport />
               <PlansCardItem title="Suporte via email" notSupport />
-              <PlansCardItem
-                title="Exportação de tabelas em excel"
-                notSupport
-              />
+              <PlansCardItem title="Exportação de tabelas em PDF" notSupport />
             </PlansCard>
 
             <PlansCard name="Pro" price="R$69,00" plan="pro" popular>
@@ -194,7 +191,7 @@ export default function Home() {
               <PlansCardItem title="Sem anúncios" />
               <PlansCardItem title="Mantem os dados salvos" />
               <PlansCardItem title="Suporte via email" />
-              <PlansCardItem title="Exportação de tabelas em excel" />
+              <PlansCardItem title="Exportação de tabelas em PDF" />
             </PlansCard>
           </AnimateContent>
         </section>

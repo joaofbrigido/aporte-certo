@@ -11,7 +11,7 @@ type ToolsTabsProps = {
 
 export const ToolsTabs = ({ active }: ToolsTabsProps) => {
   return (
-    <div className="p-1 bg-muted inline-flex gap-1 rounded-md mb-3">
+    <div className="p-1 bg-muted inline-flex gap-1 rounded-md mb-3 max-sm:grid max-sm:grid-cols-2">
       <Link
         href="controle-do-aporte"
         className={cn(
