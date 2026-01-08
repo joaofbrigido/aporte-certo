@@ -213,69 +213,62 @@ export const WithTotalForm = ({
       <BasicTable
         containerClassName="mt-5"
         bordered
-        header={
+        data={investimentsWithTotal.investments ?? []}
+        header={() => (
           <>
             <TableHead>Ativo</TableHead>
             <TableHead>Preço Unitário</TableHead>
             <TableHead>Qtd Cotas</TableHead>
             <TableHead>Porcentagem</TableHead>
             <TableHead>Preço Total</TableHead>
-            <TableHead></TableHead>
+            <TableHead />
           </>
-        }
+        )}
+        renderRow={(investment) => (
+          <TableRow key={`investiments-${investment.guid}`}>
+            <TableCell className="flex items-center gap-2 min-w-[130px]">
+              <Image
+                src={investment.stock.logo}
+                alt={investment.stock.name}
+                width={32}
+                height={32}
+                className="rounded-md"
+              />
+              {investment.stock.name}
+            </TableCell>
+
+            <TableCell>{numberToCurrency(investment.stock.price)}</TableCell>
+
+            <TableCell>{investment.stockAmount}</TableCell>
+
+            <TableCell>{investment.percentage}%</TableCell>
+
+            <TableCell>{numberToCurrency(investment.total)}</TableCell>
+
+            <TableCell>
+              <TableActionButtons
+                onEdit={() => {
+                  setEditingGuid(investment.guid);
+                  setStockInput(
+                    `${investment.stock.name}|${investment.stock.price}|${investment.stock.logo}`
+                  );
+                  setPercentageInput(investment.percentage.toString());
+                }}
+                onDelete={async () => await handleDelete(investment.guid)}
+              />
+            </TableCell>
+          </TableRow>
+        )}
         footer={
           investimentsWithTotal.investments?.length > 0 && (
             <TableRow>
               <TableCell colSpan={4}>Total</TableCell>
               <TableCell>{numberToCurrency(allStocksTotal)}</TableCell>
-              <TableCell></TableCell>
+              <TableCell />
             </TableRow>
           )
         }
-      >
-        {investimentsWithTotal.investments &&
-        investimentsWithTotal.investments.length > 0 ? (
-          investimentsWithTotal.investments.map((investment) => (
-            <TableRow key={`investiments-${investment.guid}`}>
-              <TableCell className="flex items-center gap-2 min-w-[130px]">
-                <Image
-                  src={investment.stock.logo}
-                  alt={investment.stock.name}
-                  width={32}
-                  height={32}
-                  className="rounded-md"
-                />
-                {investment.stock.name}
-              </TableCell>
-              <TableCell>{numberToCurrency(investment.stock.price)}</TableCell>
-              <TableCell>{investment.stockAmount}</TableCell>
-              <TableCell>{investment.percentage}%</TableCell>
-              <TableCell>{numberToCurrency(investment.total)}</TableCell>
-              <TableCell>
-                <TableActionButtons
-                  onEdit={() => {
-                    setEditingGuid(investment.guid);
-                    setStockInput(
-                      `${investment.stock.name}|${investment.stock.price}|${investment.stock.logo}`
-                    );
-                    setPercentageInput(investment.percentage.toString());
-                  }}
-                  onDelete={async () => await handleDelete(investment.guid)}
-                />
-              </TableCell>
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell
-              colSpan={6}
-              className="text-center text-muted-foreground"
-            >
-              Nenhum Ativo Adicionado
-            </TableCell>
-          </TableRow>
-        )}
-      </BasicTable>
+      />
     </>
   );
 };
