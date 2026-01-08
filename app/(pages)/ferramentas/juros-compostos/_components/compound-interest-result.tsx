@@ -213,7 +213,8 @@ const CompoundInterestResult = () => {
         <BasicTable
           containerClassName="col-span-full"
           bordered
-          header={
+          data={valuesPerMonth}
+          header={() => (
             <>
               <TableHead>Meses</TableHead>
               <TableHead>Juros</TableHead>
@@ -221,18 +222,17 @@ const CompoundInterestResult = () => {
               <TableHead>Total Juros</TableHead>
               <TableHead>Acumulado</TableHead>
             </>
-          }
-        >
-          {valuesPerMonth.map((moth) => (
-            <TableRow key={`juros-${moth.month}`}>
-              <TableCell>{moth.month + 1}</TableCell>
-              <TableCell>{numberToCurrency(moth.fees)}</TableCell>
-              <TableCell>{numberToCurrency(moth.totalInvested)}</TableCell>
-              <TableCell>{numberToCurrency(moth.totalInterest)}</TableCell>
-              <TableCell>{numberToCurrency(moth.accumulated)}</TableCell>
+          )}
+          renderRow={(month) => (
+            <TableRow key={`juros-${month.month}`}>
+              <TableCell>{month.month + 1}</TableCell>
+              <TableCell>{numberToCurrency(month.fees)}</TableCell>
+              <TableCell>{numberToCurrency(month.totalInvested)}</TableCell>
+              <TableCell>{numberToCurrency(month.totalInterest)}</TableCell>
+              <TableCell>{numberToCurrency(month.accumulated)}</TableCell>
             </TableRow>
-          ))}
-        </BasicTable>
+          )}
+        />
       </section>
     </div>
   );

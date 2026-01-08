@@ -22,7 +22,8 @@ export const CeilingPriceTable = ({
     <BasicTable
       containerClassName="mt-5"
       bordered
-      header={
+      data={ceilingPrices ?? []}
+      header={() => (
         <>
           <TableHead>Ativo</TableHead>
           <TableHead>D. Yield Esperado</TableHead>
@@ -30,51 +31,48 @@ export const CeilingPriceTable = ({
           <TableHead>Preço Atual</TableHead>
           <TableHead>Preço Teto</TableHead>
           <TableHead>Margin Segurança</TableHead>
-          <TableHead></TableHead>
+          <TableHead />
         </>
-      }
-    >
-      {ceilingPrices && ceilingPrices.length > 0 ? (
-        ceilingPrices.map((cp) => (
-          <TableRow key={`investiments-${cp.guid}`}>
-            <TableCell className="flex items-center gap-2 min-w-[130px]">
-              <Image
-                src={cp.stock.logo}
-                alt={cp.stock.name}
-                width={32}
-                height={32}
-                className="rounded-md"
-              />
-              {cp.stock.name}
-            </TableCell>
-            <TableCell>{cp.dividendYield}%</TableCell>
-            <TableCell>{numberToCurrency(cp.dpa)}</TableCell>
-            <TableCell>{numberToCurrency(cp.stock.price)}</TableCell>
-            <TableCell>{numberToCurrency(cp.ceilingPrice)}</TableCell>
-            <TableCell
-              className={cn(
-                cp.safetyMargin > 0 ? "text-green-600" : "text-red-600"
-              )}
-            >
-              {numberToPercent(cp.safetyMargin)}
-            </TableCell>
-            <TableCell>
-              <TableActionButtons
-                onEdit={() => {
-                  onEdit(cp);
-                }}
-                onDelete={() => onDelete(cp.guid)}
-              />
-            </TableCell>
-          </TableRow>
-        ))
-      ) : (
-        <TableRow>
-          <TableCell colSpan={6} className="text-center text-muted-foreground">
-            Nenhum Ativo Adicionado
+      )}
+      renderRow={(cp) => (
+        <TableRow key={`investiments-${cp.guid}`}>
+          <TableCell className="flex items-center gap-2 min-w-[130px]">
+            <Image
+              src={cp.stock.logo}
+              alt={cp.stock.name}
+              width={32}
+              height={32}
+              className="rounded-md"
+            />
+            {cp.stock.name}
+          </TableCell>
+
+          <TableCell>{cp.dividendYield}%</TableCell>
+
+          <TableCell>{numberToCurrency(cp.dpa)}</TableCell>
+
+          <TableCell>{numberToCurrency(cp.stock.price)}</TableCell>
+
+          <TableCell>{numberToCurrency(cp.ceilingPrice)}</TableCell>
+
+          <TableCell
+            className={cn(
+              cp.safetyMargin > 0 ? "text-green-600" : "text-red-600"
+            )}
+          >
+            {numberToPercent(cp.safetyMargin)}
+          </TableCell>
+
+          <TableCell>
+            <TableActionButtons
+              onEdit={() => {
+                onEdit(cp);
+              }}
+              onDelete={() => onDelete(cp.guid)}
+            />
           </TableCell>
         </TableRow>
       )}
-    </BasicTable>
+    />
   );
 };
