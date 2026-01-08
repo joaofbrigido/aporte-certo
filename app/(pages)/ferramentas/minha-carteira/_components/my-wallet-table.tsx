@@ -10,16 +10,17 @@ import Image from "next/image";
 
 export const MyWalletTable = ({
   stocksWallet,
+  totalInvestment,
   onEdit,
   onDelete,
 }: {
   stocksWallet: StockWallet[];
+  totalInvestment: string;
   onEdit: (stockWallet: StockWallet) => void;
   onDelete: (guid: string) => void;
 }) => {
   return (
     <BasicTable
-      containerClassName="mt-5"
       bordered
       header={
         <>
@@ -38,11 +39,7 @@ export const MyWalletTable = ({
         stocksWallet.length > 0 && (
           <TableRow>
             <TableCell colSpan={7}>Total</TableCell>
-            <TableCell>
-              {numberToCurrency(
-                stocksWallet.reduce((acc, stock) => acc + stock.totalPrice, 0)
-              )}
-            </TableCell>
+            <TableCell>{totalInvestment}</TableCell>
             <TableCell></TableCell>
           </TableRow>
         )

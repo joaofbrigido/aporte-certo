@@ -13,7 +13,7 @@ import {
   deleteStockWalletAction,
   upsertStockWalletAction,
 } from "@/app/actions/my-wallet";
-import { MyWalletTable } from "./my-wallet-table";
+import { MyWalletResult } from "./my-wallet-result";
 
 export const MyWalletForm = ({
   stocksWallet,
@@ -120,7 +120,7 @@ export const MyWalletForm = ({
         </CardContent>
       </Card>
 
-      <MyWalletTable
+      <MyWalletResult
         stocksWallet={stocksWallet}
         onEdit={handleEditStock}
         onDelete={handleDelete}
