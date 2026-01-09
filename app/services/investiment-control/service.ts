@@ -27,7 +27,11 @@ export async function createInvestmentControlWithTotalCookie(
 
     cookieStore.set(
       "InvestmentControlWithTotal",
-      JSON.stringify(newInvestment)
+      JSON.stringify(newInvestment),
+      {
+        maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+        path: "/",
+      }
     );
 
     return { success: true, message: null };
@@ -73,7 +77,11 @@ export async function updateInvestmentControlWithTotalCookie({
 
     cookieStore.set(
       "InvestmentControlWithTotal",
-      JSON.stringify(updateInvestment)
+      JSON.stringify(updateInvestment),
+      {
+        maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+        path: "/",
+      }
     );
 
     return { success: true, message: null };
@@ -107,7 +115,11 @@ export async function deleteInvestmentControlWithTotalCookie(guid: string) {
         ...savedInvestiment,
         totalPercentage: newTotalPercentage,
         investments: filteredInvestiments,
-      })
+      }),
+      {
+        maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+        path: "/",
+      }
     );
 
     return { success: true, message: null };
@@ -169,7 +181,11 @@ export async function createInvestmentControlWithoutTotalCookie(
     savedInvestments.push(newInvestment);
     cookieStore.set(
       "InvestmentsControlWithoutTotal",
-      JSON.stringify(savedInvestments)
+      JSON.stringify(savedInvestments),
+      {
+        maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+        path: "/",
+      }
     );
 
     return { success: true, message: null };
@@ -200,7 +216,11 @@ export async function updateInvestmentControlWithoutTotalCookie({
     savedInvestments[index] = editedInvestment;
     cookieStore.set(
       "InvestmentsControlWithoutTotal",
-      JSON.stringify(savedInvestments)
+      JSON.stringify(savedInvestments),
+      {
+        maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+        path: "/",
+      }
     );
 
     return { success: true, message: null };
@@ -226,7 +246,11 @@ export async function deleteInvestmentControlWithoutTotalCookie(guid: string) {
     );
     cookieStore.set(
       "InvestmentsControlWithoutTotal",
-      JSON.stringify(filteredInvestments)
+      JSON.stringify(filteredInvestments),
+      {
+        maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+        path: "/",
+      }
     );
 
     return { success: true, message: null };

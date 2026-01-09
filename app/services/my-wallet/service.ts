@@ -9,7 +9,10 @@ export async function createStockWalletCookie(stockWallet: StockWallet) {
     ) as StockWallet[];
 
     myWallet.push(stockWallet);
-    cookieStore.set("myWallet", JSON.stringify(myWallet));
+    cookieStore.set("myWallet", JSON.stringify(myWallet), {
+      maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+      path: "/",
+    });
 
     return { success: true, message: null };
   } catch (error) {
@@ -36,7 +39,10 @@ export async function updateStockWalletCookie({
     const index = myWallet.findIndex((cp) => cp.guid === guid);
 
     myWallet[index] = stockWallet;
-    cookieStore.set("myWallet", JSON.stringify(myWallet));
+    cookieStore.set("myWallet", JSON.stringify(myWallet), {
+      maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+      path: "/",
+    });
 
     return { success: true, message: null };
   } catch (error) {
@@ -56,7 +62,10 @@ export async function deleteStockWalletCookie(guid: string) {
     ) as StockWallet[];
 
     const filteredStockWallet = myWallet.filter((sw) => sw.guid !== guid);
-    cookieStore.set("myWallet", JSON.stringify(filteredStockWallet));
+    cookieStore.set("myWallet", JSON.stringify(filteredStockWallet), {
+      maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+      path: "/",
+    });
 
     return { success: true, message: null };
   } catch (error) {

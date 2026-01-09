@@ -9,7 +9,10 @@ export async function createCeilingPriceCookie(ceilingPrice: CeilingPrice) {
     ) as CeilingPrice[];
 
     ceilingPrices.push(ceilingPrice);
-    cookieStore.set("ceilingPrices", JSON.stringify(ceilingPrices));
+    cookieStore.set("ceilingPrices", JSON.stringify(ceilingPrices), {
+      maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+      path: "/",
+    });
 
     return { success: true, message: null };
   } catch (error) {
@@ -36,7 +39,10 @@ export async function updateCeilingPriceCookie({
     const index = ceilingPrices.findIndex((cp) => cp.guid === guid);
 
     ceilingPrices[index] = ceilingPrice;
-    cookieStore.set("ceilingPrices", JSON.stringify(ceilingPrices));
+    cookieStore.set("ceilingPrices", JSON.stringify(ceilingPrices), {
+      maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+      path: "/",
+    });
 
     return { success: true, message: null };
   } catch (error) {
@@ -58,7 +64,10 @@ export async function deleteCeilingPriceCookie(guid: string) {
     const filteredCeilingPrices = ceilingPrices.filter(
       (cp) => cp.guid !== guid
     );
-    cookieStore.set("ceilingPrices", JSON.stringify(filteredCeilingPrices));
+    cookieStore.set("ceilingPrices", JSON.stringify(filteredCeilingPrices), {
+      maxAge: 60 * 60 * 24 * 365 * 10, // 10 anos em segundos
+      path: "/",
+    });
 
     return { success: true, message: null };
   } catch (error) {
